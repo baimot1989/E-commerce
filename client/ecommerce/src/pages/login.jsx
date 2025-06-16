@@ -9,7 +9,6 @@ import { Box } from "@mui/system";
 const Login = () => {
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.auth);
-    console.log(auth)
     const navigate = useNavigate();
     // const user = useSelector((state) => state.user?.userName); // ? opretor checked if the userName propetie exsist
     const [userName, setUserName] = useState('')
@@ -17,7 +16,6 @@ const Login = () => {
     // const { login, error } = useLogin();
 
     useEffect(() => {
-        console.log(auth.user)
         if (auth.user) {
             if (auth.user.role === 'admin')
                 navigate('/admindash/home'); // 👈 redirect to home

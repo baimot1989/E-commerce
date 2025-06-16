@@ -40,6 +40,7 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={  <Login />} />
         <Route path='/signup' element={!user && <Signup />} />
+
         <Route path='/admindash' element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/" replace />} >
           <Route path='home' element={<Home />} />
           <Route path='categories' element={<Categories />} />
@@ -47,6 +48,7 @@ function App() {
           <Route path='products' element={<Products/>} />
           <Route path='statistics' element={<Statistics/>} />
         </Route>
+        
         <Route path='/customerdash' element={user?.role === 'customer' ? <CustomerDashboard /> : <Navigate to="/" replace />} >
           {/* <Route path='home' element={<Home />} /> */}
           <Route path='products' element={<ProductsCatlog />} />

@@ -6,9 +6,9 @@ const productSchema = new mongoose.Schema(
         category: {type: String, require: true},
         price: {type: Number, require: true},
         description: String,
-        linkImage: String,
+        imageSrc: String,
+        inStock: Number,
         boughtBy: []
-
     },
     { versionKey: false }
 );

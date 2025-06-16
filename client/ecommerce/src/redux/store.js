@@ -1,18 +1,22 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+
 import authReducer from '../redux/auth/authSlice';
+import cartReducer from '../redux/cart/cartSlice'; 
 
 // Combine all reducers into a single root reducer (you can add more reducers here)
 const rootReducer = combineReducers({
   auth: authReducer, 
+  cart: cartReducer,
 });
 
 // Configuration object for redux-persist
 const persistConfig = {
-  key: 'root',       // The key under which the state will be stored in localStorage
-  version: 1,        // Version number for potential migrations in the future
-  storage,           // Storage engine (in this case, localStorage)
+  key: 'root',                    // The key under which the state will be stored in localStorage
+  version: 1,                     // Version number for potential migrations in the future
+  storage,                        // Storage engine (in this case, localStorage)
+  whitelist: ['auth'],    // persist only auth
 };
 
 // Enhance the root reducer with persistence capabilities

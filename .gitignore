@@ -1,0 +1,5 @@
+# Ignore server node_modules
+server/node_modules/
+
+# Ignore client node_modules
+client/ecommerce/node_modules/

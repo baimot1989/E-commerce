@@ -11,7 +11,6 @@ const MyAccount = () => {
     const dispatch = useDispatch();
 
     const user = useSelector((state) => state.auth.user);
-    console.log(user)
     const [userDetails, setUserDetails] = useState({
         firstName: user.firstName,
         lastName: user.lastName,
