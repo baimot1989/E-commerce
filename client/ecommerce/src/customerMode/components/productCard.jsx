@@ -1,19 +1,33 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import {  Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, openCart, setCartItems } from "../../redux/cart/cartSlice";
+import { addItem, clearCartError, clearCartSuccess} from "../../redux/cart/cartSlice";
+import { Link } from "react-router-dom";
+import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
+import { useEffect } from "react";
 
 const ProductCard = ({ product }) => {
 
-    const cartItems = useSelector((state) => state.cart.cartItems)
+    const error = useSelector((state) => state.cart.error);
+    const success = useSelector((state) => state.cart.success);
     const dispatch = useDispatch();
 
     const addToCart = () => {
-        dispatch(addItem(product))
-        dispatch(openCart())
-        dispatch(openCart())
-    }
+        dispatch(addItem(product));
+    };
+
+    useEffect(() => {
+        if (error) {
+          dispatch(setModalMassgae(error));
+          dispatch(setOpenModal());
+          dispatch(clearCartError());
+        } else if (success) {
+          dispatch(setModalMassgae('המוצר נוסף בהצלחה'));
+          dispatch(setOpenModal());
+          dispatch(clearCartSuccess());
+        }
+      }, [error, success, dispatch]);
+
+
     return (
         <>
             <Card>
@@ -24,28 +38,34 @@ const ProductCard = ({ product }) => {
                 <CardMedia
                     component="img"
                     height="194"
-                    
+
                     image={product.imageSrc}
                     alt={product.title}
-                    sx={{ objectFit: 'contain', maxHeight:  '194'}}
+                    sx={{ objectFit: 'contain', maxHeight: '194' }}
                 />
                 <CardContent>
                     <Box
-                     sx={{
-                        display: 'flex',
-                        flexDirection: "row", // stack on xs, inline on sm and up
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
-                    }}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: "row", // stack on xs, inline on sm and up
+                            alignItems: 'center',
+                            justifyContent: 'space-around',
+                        }}
                     >
                         <Typography>{`Price: ${product.price}$`}</Typography>
                         <Typography>{`In stock: ${product.inStock}`}</Typography>
                         <Typography>{'Bought: 43'}</Typography>
                     </Box>
                 </CardContent>
-                <CardActions sx={{justifyContent: 'space-around'}}>
-                    <Button onClick={addToCart} variant="contained" sx={{fontSize: {md: '12px'}}}>Add to cart</Button>
-                    <Button variant="contained" sx={{fontSize: {md: '12px'}}}>Read More</Button>
+                <CardActions sx={{ justifyContent: 'space-around' }}>
+                    <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' } }}>Add to cart</Button>
+                    <Button variant="contained" sx={{ fontSize: { md: '12px' } }}>
+                        <Link
+                            style={{ textDecoration: 'none', color: 'white' }}
+                            to={`/customerdash/product/${product.title}`}
+                            state={product}>
+                            Read More</Link>
+                    </Button>
                 </CardActions>
 
             </Card>

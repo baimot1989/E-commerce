@@ -16,7 +16,7 @@ const BarChartStat = () => {
         let userData;
         products.forEach(product => {
             const { boughtBy } = product
-            userData = boughtBy.find(item => item.fullName == e.target.value);
+            userData = boughtBy.find(item => item.fullName.toLowerCase() == e.target.value.toLowerCase());
             if (userData) {
                 userData.name = product.title;
                 userBought.push(userData)

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Grid, TextField, Typography, Box } from "@mui/material";
+import { Button, Grid, TextField, Typography, Box, Container } from "@mui/material";
 
 const Category = ({ item, updateData, deleteData }) => {
   const [editId, setEditId] = useState(null);
@@ -24,9 +24,8 @@ const Category = ({ item, updateData, deleteData }) => {
   };
 
   return (
-    <Box sx={{ width: "70%", margin: "0 auto 10px" }}>
-      <Grid container spacing={2} alignItems="center" justifyContent={"space-between"}>
-        <Grid item sm={12} md={6}>
+      <Grid container spacing={2} alignItems="center" justifyContent={'center'} sx={{my: 2}}>
+        <Grid size={{ xs: 12, sm: 6}}>
           {editId === item._id ? (
             <TextField
               fullWidth
@@ -42,8 +41,8 @@ const Category = ({ item, updateData, deleteData }) => {
           )}
         </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+        <Grid size={{ xs: 12, md: 6}}>
+          <Box sx={{ display: "flex", justifyContent: 'center', gap: 2 }}>
             {editId === item._id ? (
               <>
                 <Button variant="contained" color="primary" onClick={saveEdit}>
@@ -74,7 +73,6 @@ const Category = ({ item, updateData, deleteData }) => {
           </Box>
         </Grid>
       </Grid>
-    </Box>
   );
 };
 

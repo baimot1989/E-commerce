@@ -1,75 +1,84 @@
-import { Alert, Button, Checkbox, Container, FormControlLabel, TextField, Typography } from "@mui/material";
-import { Grid } from "@mui/system";
+
+import {
+    Alert,
+    Button,
+    Checkbox,
+    Container,
+    FormControlLabel,
+    Grid,
+    TextField,
+    Typography
+} from "@mui/material";
+
 import { useDispatch, useSelector } from "react-redux";
-import { useFetchData } from "../../hooks/fetchData";
+import { useFetchData } from "../../hooks/fetchData"; // Custom hook for making API requests
+import { updateUser } from "../../redux/auth/authSlice"; // Redux action to update the user
 import { useState } from "react";
-import { updateUser } from "../../redux/auth/authSlice";
+
 
 const MyAccount = () => {
+    // Get the current user from Redux state
+    const user = useSelector((state) => state.auth.user);
 
+    // Destructure updateData function and loading/error states from custom fetch hook
     const { updateData, error, isloading } = useFetchData('http://localhost:3000/users');
+
+    // Get Redux dispatcher to send actions
     const dispatch = useDispatch();
 
-    const user = useSelector((state) => state.auth.user);
+    // Local state to manage form input values including checkbox
     const [userDetails, setUserDetails] = useState({
         firstName: user.firstName,
         lastName: user.lastName,
         userName: user.userName,
-        password: ''
-    })
-    const [isChecked, setIsChecked] = useState(user.allowOthersToSeeOrders);
+        password: '',
+        allowOthersToSeeOrders: user.allowOthersToSeeOrders
+    });
 
-    const handle = (e) => {
+    // Handle all input and checkbox changes in one function
+    const handleInputOnChange = (e) => {
         const { name, value, type, checked } = e.target;
-        if (type === "checkbox") {
-            setIsChecked(checked);
-        } else {
-            setUserDetails((prev) => ({ ...prev, [name]: value }));
-        }
+
+        // For checkbox, use `checked`, otherwise use `value`
+        setUserDetails((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value
+        }));
     };
 
-    // function fro submit the form
-    const heandleSubmit = async (e) => {
-        e.preventDefault()
 
-
-        const updatedUser = {
-            ...userDetails,
-            allowOthersToSeeOrders: isChecked,
-        };
-        // console.log(status)
-        const status = await updateData(user._id, updatedUser);
-
-
-        console.log(status)
-        if (status == 'OK') {
-            dispatch(updateUser(updatedUser));
-            console.log("Profile updated successfully!")
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const status = await updateData(user._id, userDetails);
+        if (status === 'OK') {
+            dispatch(updateUser(userDetails)); // Update Redux store
             alert("Profile updated successfully!");
-            setUserDetails({...userDetails,password:''})
+
+            // Clear password input after successful update
+            setUserDetails((prev) => ({ ...prev, password: '' }));
         }
-    }
-
-
+    };
 
     return (
         <>
             <Container>
-                
-                <form onSubmit={heandleSubmit} style={{ width: '70%', margin: ' 0 auto', marginBottom: '20px' }}>
-                <Typography variant="h6" my={3}>Editing a profile</Typography>
+                <form
+                    onSubmit={handleSubmit}
+                    style={{ width: '70%', margin: '0 auto', marginBottom: '20px' }}
+                >
+                    <Typography variant="h6" my={3}>
+                        Editing a profile
+                    </Typography>
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
                                 type="text"
                                 name="firstName"
-                                id="firstName"
                                 label="First Name"
                                 variant="outlined"
                                 value={userDetails.firstName}
-
-                                onChange={handle}
+                                onChange={handleInputOnChange}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
@@ -77,12 +86,10 @@ const MyAccount = () => {
                                 fullWidth
                                 type="text"
                                 name="lastName"
-                                id="lastName"
                                 label="Last Name"
                                 variant="outlined"
                                 value={userDetails.lastName}
-
-                                onChange={handle}
+                                onChange={handleInputOnChange}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
@@ -90,12 +97,10 @@ const MyAccount = () => {
                                 fullWidth
                                 type="text"
                                 name="userName"
-                                id="userName"
                                 label="User Name"
                                 variant="outlined"
                                 value={userDetails.userName}
-
-                                onChange={handle}
+                                onChange={handleInputOnChange}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
@@ -104,37 +109,42 @@ const MyAccount = () => {
                                 required
                                 type="password"
                                 name="password"
-                                id="password"
                                 label="Password"
                                 variant="outlined"
                                 value={userDetails.password}
-
-                                onChange={handle}
+                                onChange={handleInputOnChange}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        checked={isChecked}
-                                        onChange={handle}
-                                        name="ordersAllow"
+                                        checked={userDetails.allowOthersToSeeOrders}
+                                        onChange={handleInputOnChange}
+                                        name="allowOthersToSeeOrders"
                                     />
                                 }
                                 label="Allow others see my orders"
                             />
                         </Grid>
                     </Grid>
-                    <Button disabled={isloading} style={{ width: '100%' }} type="submit" variant="contained" >Save</Button>
+                    <Button
+                        disabled={isloading}
+                        style={{ width: '100%' }}
+                        type="submit"
+                        variant="contained"
+                    >
+                        {isloading ? 'Saving...' : 'Save'}
+                    </Button>
                 </form>
-                 {error && (
-                                        <Alert severity="error" style={{ marginBottom: '15px' }}>
-                                            {error}
-                                        </Alert>
-                                    )}
+                {error && (
+                    <Alert severity="error" style={{ marginBottom: '15px' }}>
+                        {error}
+                    </Alert>
+                )}
             </Container>
         </>
     );
-}
+};
 
 export default MyAccount;

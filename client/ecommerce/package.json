@@ -20,6 +20,8 @@
     "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-image-gallery": "^1.4.0",
+    "react-rater": "^6.0.5",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
     "recharts": "^2.15.3",
@@ -36,6 +38,6 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.13",
     "globals": "^15.11.0",
-    "vite": "^5.4.9"
+    "vite": "^6.3.5"
   }
 }

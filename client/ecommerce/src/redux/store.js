@@ -4,11 +4,13 @@ import storage from 'redux-persist/lib/storage';
 
 import authReducer from '../redux/auth/authSlice';
 import cartReducer from '../redux/cart/cartSlice'; 
+import modalReducer from '../redux/modal/modalSlice'
 
 // Combine all reducers into a single root reducer (you can add more reducers here)
 const rootReducer = combineReducers({
   auth: authReducer, 
   cart: cartReducer,
+  modal: modalReducer
 });
 
 // Configuration object for redux-persist

@@ -6,6 +6,8 @@ const initialState = {
   cartItems: [],
   cartOpen: false,
   totalItemTypes: 0,
+  error: null,
+  success: false,
 };
 
 const cartSlice = createSlice({
@@ -31,12 +33,14 @@ const cartSlice = createSlice({
     addItem: (state, action) => {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(item => item._id === newItem._id);
+    
       if (existingItem) {
-        if (existingItem.quantity < existingItem.inStock) {
-          existingItem.quantity += 1;
-        }
+        state.error = 'המוצר כבר נוסף לעגלה';
+        state.success = false;
       } else {
         state.cartItems.push({ ...newItem, quantity: 1 });
+        state.error = null;
+        state.success = true; 
       }
     },
     removeFromCart: (state, action) => {
@@ -50,10 +54,18 @@ const cartSlice = createSlice({
     totalItem: (state) => {
         state.totalItemTypes = state.cartItems.length;
       },
+        // REDUCER FOR CLEAR  ERROR STATA 
+      clearCartError: (state) => {
+        state.error = null;
+      },
+      clearCartSuccess: (state) => {
+        state.success = false;
+      },
 
     // REDUCERS FOR CONTROLLING CART DRAWER
     openCart: (state) => {
       state.cartOpen = true;
+      console.log(state.cartOpen)
     },
     closeCart: (state) => {
       state.cartOpen = false;
@@ -74,7 +86,10 @@ export const {
   openCart,
   closeCart,
   toggleCart,
-  totalItem
+  totalItem,
+  clearCartError,
+  clearCartSuccess,
+  
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -9,7 +9,7 @@ const CartItems = () => {
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.cart?.cartItems || [])
 
- 
+
 
   return (
     <Box sx={{ px: 2 }}>
@@ -25,21 +25,25 @@ const CartItems = () => {
               In Stock: {item.inStock}
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-              <IconButton
-                onClick={() => dispatch(decreaseQty(item._id))}
-                disabled={item.quantity === 1}  // ** take care of it
-              >
-                <Remove />
-              </IconButton>
-              <Typography>{item.quantity}</Typography>
-              <IconButton
-                onClick={() => dispatch(increaseQty(item._id))}
-                disabled={item.quantity >= item.inStock}
-              >
-                <Add />
-              </IconButton>
-
+            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, justifyContent: 'space-evenly' }}>
+              <Box sx={{display: 'flex', alignItems: 'center'}}>
+                {/* decreaseQty */}
+                <IconButton
+                  onClick={() => dispatch(decreaseQty(item._id))}
+                  disabled={item.quantity === 1}  // ** take care of it
+                >
+                  <Remove />
+                </IconButton>
+                <Typography>{item.quantity}</Typography>
+                {/* increaseQty */}
+                <IconButton
+                  onClick={() => dispatch(increaseQty(item._id))}
+                  disabled={item.quantity >= item.inStock}
+                >
+                  <Add />
+                </IconButton>
+              </Box>
+              {/*Delete item  */}
               <IconButton
                 onClick={() => dispatch(removeFromCart(item._id))}
                 sx={{ ml: 1 }}

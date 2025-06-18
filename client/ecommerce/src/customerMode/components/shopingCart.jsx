@@ -1,23 +1,43 @@
 // components/ShoppingCart.jsx
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Drawer, Box, Typography, IconButton, Divider, Button } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import CartItems from './cartItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeCart } from '../../redux/cart/cartSlice'
+import { clearCartError, closeCart, setCartItems, totalItem } from '../../redux/cart/cartSlice'
+import { loadCartForUser, saveCartForUser } from '../../redux/cart/cartUtils'
 
 
 const ShoppingCart = () => {
-
+  
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const cartOpen = useSelector(state => state.cart.cartOpen);
   const cartItems = useSelector((state) => state.cart?.cartItems || []) 
+
+      useEffect(() => {
+  
+          if (user?._id) {
+            const loadedCart = loadCartForUser(user._id);
+            console.log(loadedCart)
+            if (loadedCart) {
+              dispatch(setCartItems(loadedCart));
+            }
+          }
+        }, [user?._id]);
+  
+        useEffect(() => {
+          if (user?._id) {
+            saveCartForUser(user._id, cartItems);
+            dispatch(totalItem());
+          }
+        }, [cartItems, user?.id])
+
 
   const handleClose = () => {
     dispatch(closeCart())
   }
    
-  
     // Subtotal calculation
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
 
@@ -29,7 +49,7 @@ const ShoppingCart = () => {
       sx={{
         '& .MuiDrawer-paper': {
           width: {
-            xs: '100%', // small screens (mobile)
+            xs: '93%', // small screens (mobile)
             sm: 400,   // tablets
             md: 600,   // desktops and up
           }, padding: 2

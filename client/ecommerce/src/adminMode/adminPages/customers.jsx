@@ -6,7 +6,6 @@ import { Container, Typography } from "@mui/material";
 const Customers = () => {
 
     const { data:users } = useFetchData('http://localhost:3000/users');
-  
     const { data:products } = useFetchData('http://localhost:3000/products');
 
     const columns = [ // columns for table component

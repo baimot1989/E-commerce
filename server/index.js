@@ -28,7 +28,7 @@ app.use(cors({
 
 // Routs
 app.use('/products', productController)
-app.use('/users', requireAuth, usersController)
+app.use('/users', usersController)
 app.use('/orders', ordersController)
 app.use('/categories', categoriesController)
 app.use('/authUser',authUserController)

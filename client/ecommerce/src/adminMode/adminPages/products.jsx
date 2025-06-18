@@ -8,7 +8,6 @@ import { alignItems } from '@mui/system';
 const Products = () => {
     const { data: products, updateData, addData, deleteData } = useFetchData('http://localhost:3000/products');
     const { data: categories } = useFetchData('http://localhost:3000/categories');
-    console.log(products)
 
     const [categoriesById, setCategoriesById] = useState({});
     const [productForms, setProductForms] = useState({});
@@ -33,7 +32,7 @@ const Products = () => {
                 initialForms[product._id] = {
                     title: product.title || '',
                     price: product.price || '',
-                    linkImage: product.linkImage || '',
+                    imageSrc: product.imageSrc || '',
                     description: product.description || '',
                     boughtBy: product.boughtBy
                 };
@@ -67,8 +66,8 @@ const Products = () => {
             ...productForms[id],
             category: categoriesById[id]
         };
-        const { category, description, linkImage, price, title } = selectedProduct
-        if (category === '' || description === '' || linkImage === '' || price === '' || title === '') {
+        const { category, description, imageSrc, price, title } = selectedProduct
+        if (category === '' || description === '' || imageSrc === '' || price === '' || title === '') {
             throw Error('All fields must be filled in.')
         }
         if (action === 'save') {
@@ -148,15 +147,15 @@ const Products = () => {
                                             fullWidth
                                             label="Image URL"
                                             variant="outlined"
-                                            value={productForms[item._id]?.linkImage || ''}
+                                            value={productForms[item._id]?.imageSrc || ''}
                                             required
-                                            onChange={(e) => handleInputChange(item._id, 'linkImage', e.target.value)}
+                                            onChange={(e) => handleInputChange(item._id, 'imageSrc', e.target.value)}
                                         />
                                     </Grid>
                                     <Grid size={{ xs: 12, md: 6 }}>
-                                        {productForms[item._id]?.linkImage && (
+                                        {productForms[item._id]?.imageSrc && (
                                             <img
-                                                src={productForms[item._id].linkImage}
+                                                src={productForms[item._id].imageSrc}
                                                 alt="Preview"
                                                 style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover', marginBottom: '15px' }}
                                             />

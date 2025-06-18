@@ -6,7 +6,7 @@ const AddProduct = ({ categories, createProduct, addData }) => {
     const [productDetails, setProductDetiels] = useState({
         title: '',
         price: '',
-        linkImage: '',
+        imageSrc: '',
         description: '',
         category: ''
     });
@@ -81,8 +81,8 @@ const AddProduct = ({ categories, createProduct, addData }) => {
                                 fullWidth
                                 label='Link to pic'
                                 variant='outlined'
-                                value={productDetails?.linkImage || ''}
-                                onChange={(e) => handleInputChange('linkImage', e.target.value)}
+                                value={productDetails?.imageSrc || ''}
+                                onChange={(e) => handleInputChange('imageSrc', e.target.value)}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
