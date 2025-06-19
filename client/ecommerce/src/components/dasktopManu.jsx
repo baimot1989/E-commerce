@@ -34,7 +34,7 @@
 //         </>
 //      );
 // }
- 
+
 // export default DesktopMenu;
 
 import { Box, Button } from "@mui/material";
@@ -59,17 +59,15 @@ const DesktopMenu = () => {
                         : `/${basePath}/${cleanString(page)}`;
 
                     return (
+
                         <Button
                             key={page}
                             sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
-                            <Link
-                                to={path}
-                                style={{ textDecoration: 'none', color: '#ffffff' }}
+                            component={Link} to={path}
                             >
-                                {page}
-                            </Link>
+                            {page}
                         </Button>
+
                     );
                 })}
         </Box>

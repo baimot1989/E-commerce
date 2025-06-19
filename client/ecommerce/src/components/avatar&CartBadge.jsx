@@ -8,11 +8,12 @@ import { useState } from "react";
 import styled from '@emotion/styled';
 import Badge from '@mui/material/Badge';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile','Logout'];
 
 const AvaterAndCartBadge = () => {
 
     const user = useSelector((state) => state.auth.user);
+    const firstLetUserName = user.userName[0]
     const totalItemTypes = useSelector(state => state.cart.totalItemTypes);
 
      const [anchorElUser, setAnchorElUser] = useState(null);
@@ -61,7 +62,7 @@ const AvaterAndCartBadge = () => {
                 <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            <Avatar alt={firstLetUserName} src="#" />
                         </IconButton>
                     </Tooltip>
                     <Menu

@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductCard from './productCard';
 import { Grid } from '@mui/material';
-import { Container, margin, width } from '@mui/system';
+import { Container } from '@mui/system';
 
 const ProductList = ({ products }) => {
     if (products.length === 0) return <p>No products found.</p>;

@@ -7,64 +7,68 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AvaterAndCartBadge from './avatar&CartBadge';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import DesktopMenu from './dasktopManu';
 import MobileMenu from './mobileManu';
-
+import myImage from '../assets/nGsLogo2.png'
 function AppBarRes() {
-    
+
 
     const user = useSelector((state) => state.auth.user);
-    
+
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
+                   <Box 
+                   component={Link}
+                   to={'/'}
+                   >
+                     <Box
+                        component="img"
+                        src={myImage}
+                        alt="NextG"
                         sx={{
-                            mr: 2,
                             display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
-                     {/*   mobile manu */}
-                    <MobileMenu />
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        sx={{
+                            mr: 1,
+                            width: { md: 96 },
+                            objectFit: 'cover',
                             mr: 2,
-                            display: { xs: 'flex', md: 'none' },
+                            borderRadius: '15px'
+                        }}
+                    />
+
+                   </Box>
+                    {/*   mobile manu */}
+                    <MobileMenu />
+                    <Box
+                        component={Link}
+                        to="/"
+                        sx={{
                             flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
+                            display: { xs: 'flex', md: 'none' },
+                            width: { xs: 50, sm: 70 },
+                            height: { xs: 40, sm: 50 },
+                            overflow: 'hidden', // make sure borderRadius clips the img   
                         }}
                     >
-                        LOGO
-                    </Typography>
-                     {/*  dasktop manu */}
+                        <img
+                            src={myImage}
+                            alt="NextG"
+                            style={{
+                                objectFit: 'cover',
+                                borderRadius: '15px',
+                                display: 'block',
+                            }}
+                        />
+                    </Box>
+                    {/*  dasktop manu */}
                     <DesktopMenu />
                     {user ? <AvaterAndCartBadge />
                         :
                         <Box sx={{ display: 'flex', gap: 1 }} >
-                            <Button color="inherit"><Link style={{ textDecoration: 'none', color: '#ffffff' }} to={'/login'}>Login</Link></Button>
-                            <Button color="inherit"><Link style={{ textDecoration: 'none', color: '#ffffff' }} to={'/signup'}>signup</Link></Button>
-
+                            <Button color="inherit" component={Link} to={'/login'}>Login</Button>
+                            <Button color="inherit" component={Link} to={'/signup'}>Signup</Button>
                         </Box>
                     }
                 </Toolbar>

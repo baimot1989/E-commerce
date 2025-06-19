@@ -54,7 +54,7 @@ function App() {
           </Route>
 
           <Route element={<CustomerRoute />} >
-            <Route path='customerdash' element={<CustomerDashboard />} />
+            <Route path='customerdash' element={<ProductsCatlog />} />
             <Route path='customerdash/products' element={<ProductsCatlog />} />
             <Route path='customerdash/myorders' element={<MyOrders />} />
             <Route path='customerdash/myaccount' element={<MyAccount />} />

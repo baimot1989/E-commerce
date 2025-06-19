@@ -1,6 +1,6 @@
-import {  Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, clearCartError, clearCartSuccess} from "../../redux/cart/cartSlice";
+import { addItem, clearCartError, clearCartSuccess } from "../../redux/cart/cartSlice";
 import { Link } from "react-router-dom";
 import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
 import { useEffect } from "react";
@@ -17,15 +17,15 @@ const ProductCard = ({ product }) => {
 
     useEffect(() => {
         if (error) {
-          dispatch(setModalMassgae(error));
-          dispatch(setOpenModal());
-          dispatch(clearCartError());
+            dispatch(setModalMassgae(error));
+            dispatch(setOpenModal());
+            dispatch(clearCartError());
         } else if (success) {
-          dispatch(setModalMassgae('המוצר נוסף בהצלחה'));
-          dispatch(setOpenModal());
-          dispatch(clearCartSuccess());
+            dispatch(setModalMassgae('המוצר נוסף בהצלחה'));
+            dispatch(setOpenModal());
+            dispatch(clearCartSuccess());
         }
-      }, [error, success, dispatch]);
+    }, [error, success, dispatch]);
 
 
     return (
@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
 
                     image={product.imageSrc}
                     alt={product.title}
-                    sx={{ objectFit: 'contain', maxHeight: '194' }}
+                    sx={{ objectFit: 'contain', maxHeight: 194 }}
                 />
                 <CardContent>
                     <Box
@@ -59,12 +59,14 @@ const ProductCard = ({ product }) => {
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'space-around' }}>
                     <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' } }}>Add to cart</Button>
-                    <Button variant="contained" sx={{ fontSize: { md: '12px' } }}>
-                        <Link
-                            style={{ textDecoration: 'none', color: 'white' }}
-                            to={`/customerdash/product/${product.title}`}
-                            state={product}>
-                            Read More</Link>
+                    <Button
+                        variant="contained"
+                        component={Link}
+                        to={`/customerdash/product/${product.title}`}
+                        state={product}
+                        sx={{fontSize: { md: '12px' }, color: 'white' }}
+                    >
+                        Read More
                     </Button>
                 </CardActions>
 
