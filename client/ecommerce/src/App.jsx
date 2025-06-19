@@ -30,6 +30,17 @@ const theme = createTheme({
   }
 });
 
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: teal[200],       // Light teal
+//       light: teal[100],      // Even lighter
+//       dark: teal[300],       // Optional darker shade
+//       contrastText: '#004d40' // Dark teal for contrast
+//     }
+//   }
+// });
+
 function App() {
 
   return (

@@ -1,4 +1,6 @@
 const ordersRepo = require('../repositories/ordersRepo')
+const { orderNumber, getDate } = require('../utils/utils')
+
 
 const getAllOrders = () => {
     return ordersRepo.getOrders();
@@ -8,6 +10,9 @@ const getOrderById = (id) => {
     return ordersRepo.getOrderById(id);
  };
 const addOrder = (obj) => {
+
+   obj.orderNumber = orderNumber()
+
     return ordersRepo.addOrder(obj);
  };
 

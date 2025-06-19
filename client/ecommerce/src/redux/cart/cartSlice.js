@@ -6,6 +6,7 @@ const initialState = {
   cartItems: [],
   cartOpen: false,
   totalItemTypes: 0,
+  subtotal: 0,
   error: null,
   success: false,
 };
@@ -46,6 +47,11 @@ const cartSlice = createSlice({
     removeFromCart: (state, action) => {
       const idToRemove = action.payload;
       state.cartItems = state.cartItems.filter(item => item._id !== idToRemove);
+    },
+    // REDUCER FOR TOTAL PRICE
+    calcSubtotal: (state) => {
+        state.subtotal = state.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+
     },
     clearCart: (state) => {
       state.cartItems = [];
@@ -89,6 +95,7 @@ export const {
   totalItem,
   clearCartError,
   clearCartSuccess,
+  calcSubtotal,
   
 } = cartSlice.actions;
 

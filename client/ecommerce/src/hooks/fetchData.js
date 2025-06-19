@@ -19,26 +19,27 @@ export const useFetchData = (url) => {
             setData(data)
             setIsloading(false)
         }).catch(err => {
-            console.log(err)
             setError(err)
             setIsloading(false)
-        } )
+        })
 
     }, [url, resp])
 
     const addData = async (obj) => {
-         setIsloading(true)
+        setIsloading(true);
         try {
             const { data } = await axios.post(url, obj, { withCredentials: true });
             setResp(data);
-            setIsloading(false)
         } catch (error) {
             const message = error.response?.data?.error || 'Request failed';
-            setError(message)
-            console.log(error);
-            setIsloading(false)
+            setError(message);
+            setIsloading(false);
+            throw new Error(message);  
+        } finally {
+            setIsloading(false);
         }
-    }
+    };
+
     const updateData = async (id, obj) => {
         setIsloading(true)
         try {
@@ -50,6 +51,9 @@ export const useFetchData = (url) => {
             const message = error.response?.data?.error || 'Update failed';
             setError(message)
             setIsloading(false)
+            throw new Error(message); 
+        } finally {
+            setIsloading(false);
         }
     };
     const deleteData = async (id) => {
@@ -62,6 +66,9 @@ export const useFetchData = (url) => {
             const message = error.response?.data?.error || 'Request failed';
             setError(message)
             setIsloading(false)
+            throw new Error(message); 
+        }finally {
+            setIsloading(false);
         }
     }
 

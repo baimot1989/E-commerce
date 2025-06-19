@@ -10,7 +10,10 @@ const createToken = (id) => {
 };
 
 
-
+function orderNumber() {
+    const max = 9999999; // 7 digits max
+    return Math.floor(Math.random() * (max + 1));
+  }
 
 const getDate = () => {
     const today = new Date();
@@ -25,4 +28,4 @@ const getDate = () => {
 
 
 
-module.exports = { getDate, createToken }
+module.exports = { getDate, createToken, orderNumber }

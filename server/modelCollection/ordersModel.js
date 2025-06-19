@@ -5,6 +5,7 @@ const ordersSchema = new mongoose.Schema(
         orderNumber: {type: Number, require: true},
         customerFullName: {type: String, require: true},
         data: {type: String, require: true},
+        totalPrice: Number,
         productsList: {type: [
             {productName: String,
                 quantity: {type: Number, require: true},

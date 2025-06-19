@@ -20,25 +20,25 @@ function AppBarRes() {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                   <Box 
-                   component={Link}
-                   to={'/'}
-                   >
-                     <Box
-                        component="img"
-                        src={myImage}
-                        alt="NextG"
-                        sx={{
-                            display: { xs: 'none', md: 'flex' },
-                            mr: 1,
-                            width: { md: 96 },
-                            objectFit: 'cover',
-                            mr: 2,
-                            borderRadius: '15px'
-                        }}
-                    />
+                    <Box
+                        component={Link}
+                        to={'/'}
+                    >
+                        <Box
+                            component="img"
+                            src={myImage}
+                            alt="NextG"
+                            sx={{
+                                display: { xs: 'none', md: 'flex' },
+                                mr: 1,
+                                width: { md: 96 },
+                                objectFit: 'cover',
+                                mr: 2,
+                                borderRadius: '15px'
+                            }}
+                        />
 
-                   </Box>
+                    </Box>
                     {/*   mobile manu */}
                     <MobileMenu />
                     <Box
