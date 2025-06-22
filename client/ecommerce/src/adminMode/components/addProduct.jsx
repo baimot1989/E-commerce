@@ -1,11 +1,16 @@
-import { Button, Container, Grid, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
+import { useDispatch } from "react-redux";
 
-const AddProduct = ({ categories, createProduct, addData }) => {
+const AddProduct = ({ categories, createProduct, addData, requestValidation }) => {
+
+    const dispatch = useDispatch();
 
     const [productDetails, setProductDetiels] = useState({
         title: '',
         price: '',
+        inStock: '',
         imageSrc: '',
         description: '',
         category: ''
@@ -18,11 +23,20 @@ const AddProduct = ({ categories, createProduct, addData }) => {
         }));
     };
 
-    const addProduct = (e) => {
+    const addProduct = async (e) => {
         e.preventDefault();
 
-        addData(productDetails);
-        createProduct()
+        const isValid = requestValidation(productDetails);
+        if (!isValid) return; // stop if validation failed
+
+        const status = await addData(productDetails);
+
+        if (status == 'OK') {
+
+            dispatch(setModalMassgae(`The product was created successfully`));
+            dispatch(setOpenModal());
+            createProduct()
+        }
     }
 
 
@@ -33,9 +47,9 @@ const AddProduct = ({ categories, createProduct, addData }) => {
 
 
                 <Paper style={{ padding: '15px', backgroundColor: '#e3e6f0' }}>
-                <Typography variant="h6" gutterBottom>
-                Adding a product: 
-                </Typography>
+                    <Typography variant="h6" gutterBottom>
+                        Adding a product:
+                    </Typography>
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, md: 6 }} >
 
@@ -48,13 +62,25 @@ const AddProduct = ({ categories, createProduct, addData }) => {
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <TextField style={{ backgroundColor: 'whitesmoke' }}
-                                fullWidth
-                                label='Price'
-                                variant='outlined'
-                                value={productDetails?.price || ''}
-                                onChange={(e) => handleInputChange('price', e.target.value)}
-                            />
+                            <Box sx={{ display: 'flex', gap: 2 }}>
+                                <TextField style={{ backgroundColor: 'whitesmoke' }}
+                                    fullWidth
+                                    type="number"
+                                    label='Price'
+                                    variant='outlined'
+                                    value={productDetails?.price || ''}
+                                    onChange={(e) => handleInputChange('price', e.target.value)}
+                                />
+                                <TextField style={{ backgroundColor: 'whitesmoke' }}
+                                    fullWidth
+                                    type="number"
+                                    label='InStock'
+                                    variant='outlined'
+                                    value={productDetails?.inStock || ''}
+                                    onChange={(e) => handleInputChange('inStock', e.target.value)}
+                                />
+                            </Box>
+
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <Select
@@ -102,10 +128,10 @@ const AddProduct = ({ categories, createProduct, addData }) => {
                     </Grid>
                 </Paper>
             </form>
-            <div style={{ width: '80%', margin: '15px auto'}}>
-            <Button variant="contained" color="error" onClick={createProduct}> cancel</Button>
+            <div style={{ width: '80%', margin: '15px auto' }}>
+                <Button variant="contained" color="error" onClick={createProduct}> cancel</Button>
             </div>
-            
+
         </Container>
     );
 }

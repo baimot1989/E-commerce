@@ -87,7 +87,7 @@ const Login = () => {
                         />
                     </Box>
 
-                    <Button variant="contained" type="submit" disabled={auth.loading} style={{ width: '100%' }}>Login</Button>
+                    <Button variant="contained" type="submit" disabled={auth.loading} style={{ width: '100%', color: 'white' }}>Login</Button>
                     <br />
                     <Typography variant="subtitle1" style={{marginTop: '10px', textAlign: 'left'}}>
                         New user? <Link to={'/signup'}>Signup</Link>

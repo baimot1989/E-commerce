@@ -53,18 +53,20 @@ const ProductCard = ({ product }) => {
                         }}
                     >
                         <Typography>{`Price: ${product.price}$`}</Typography>
-                        <Typography>{`In stock: ${product.inStock}`}</Typography>
+                        <Typography color={product.inStock == 0 ? "error" : "black"}>
+                            {product.inStock == 0 ? 'out of stock' : `In stock: ${product.inStock}`}
+                        </Typography>
                         <Typography>{'Bought: 43'}</Typography>
                     </Box>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'space-around' }}>
-                    <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' } }}>Add to cart</Button>
+                    <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' }, color: 'white' }}>Add to cart</Button>
                     <Button
                         variant="contained"
                         component={Link}
                         to={`/customerdash/product/${product.title}`}
                         state={product}
-                        sx={{fontSize: { md: '12px' }, color: 'white' }}
+                        sx={{ fontSize: { md: '12px' }, color: 'white' }}
                     >
                         Read More
                     </Button>

@@ -2,6 +2,7 @@ body {
   margin: 0;
   height: 100vh;
   background-color: #fafafa;
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 #root {
   min-height: 100vh;

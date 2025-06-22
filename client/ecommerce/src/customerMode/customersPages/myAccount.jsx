@@ -130,7 +130,7 @@ const MyAccount = () => {
                     </Grid>
                     <Button
                         disabled={isloading}
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', color: 'white' }}
                         type="submit"
                         variant="contained"
                     >

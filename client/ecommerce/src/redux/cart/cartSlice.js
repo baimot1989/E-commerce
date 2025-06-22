@@ -9,6 +9,7 @@ const initialState = {
   subtotal: 0,
   error: null,
   success: false,
+  orderSuccess: false,
 };
 
 const cartSlice = createSlice({
@@ -60,6 +61,9 @@ const cartSlice = createSlice({
     totalItem: (state) => {
         state.totalItemTypes = state.cartItems.length;
       },
+      setOrderSuccess: (state) => {
+           state.orderSuccess = !state.orderSuccess;
+      },
         // REDUCER FOR CLEAR  ERROR STATA 
       clearCartError: (state) => {
         state.error = null;
@@ -96,6 +100,7 @@ export const {
   clearCartError,
   clearCartSuccess,
   calcSubtotal,
+  setOrderSuccess,
   
 } = cartSlice.actions;
 

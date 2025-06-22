@@ -13,8 +13,8 @@ import {
   useMediaQuery,
 } from '@mui/material';
 
-const FilterBar = ({ categories = [], maxPrice , onFilterChange }) => {
-    
+const FilterBar = ({ categories = [], maxPrice, onFilterChange }) => {
+
   const isMobile = useMediaQuery('(max-width:600px)');
 
   const [category, setCategory] = useState('All');
@@ -31,7 +31,7 @@ const FilterBar = ({ categories = [], maxPrice , onFilterChange }) => {
     console.log('randring')
   }, [category, price, title, onFilterChange]);
 
-  
+
 
   const handleClear = () => {
     setCategory('All');
@@ -46,14 +46,15 @@ const FilterBar = ({ categories = [], maxPrice , onFilterChange }) => {
         flexWrap: 'wrap',
         gap: 2,
         p: 2,
-        border: '1px solid #ccc',
         borderRadius: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
+        margin: '0 auto',
+        width: {xl:' 70%', md: '90%', sm: "90%"}
       }}
     >
       {/* Category */}
-      <FormControl sx={{ minWidth: 150 }} size="small">
+      <FormControl sx={{ minWidth: 150, flexGrow: 1 }} size="small">
         <InputLabel>Category</InputLabel>
         <Select
           value={category}
@@ -84,16 +85,19 @@ const FilterBar = ({ categories = [], maxPrice , onFilterChange }) => {
       </Box>
 
       {/* Title Input */}
-      <TextField
-        label="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        size="small"
-        sx={{ minWidth: isMobile ? '100%' : 150 }}
-      />
+      <Box sx={{ flexGrow: 1 }}>
+        <TextField
+          fullWidth
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          size="small"
+          sx={{ minWidth: isMobile ? '100%' : 150 }}
+        />
+      </Box>
 
       {/* Clear Button */}
-      <Button variant="outlined" color="secondary" onClick={handleClear}>
+      <Button variant="outlined" color="primary" onClick={handleClear}>
         Clear
       </Button>
     </Box>

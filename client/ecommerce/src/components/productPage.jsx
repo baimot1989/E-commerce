@@ -146,6 +146,7 @@ const ProductDetail = () => {
                     {/* Actions */}
                     <Stack direction="row" spacing={2} my={3}>
                         <Button
+                        sx={{color: 'white'}}
                             variant="contained"
                             color="primary"
                             // startIcon={}

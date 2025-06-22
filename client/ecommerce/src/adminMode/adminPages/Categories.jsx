@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useFetchData } from "../../hooks/fetchData";
 import Category from "../components/category";
 import { Button, Container, TextField, Typography } from "@mui/material";
-import { margin } from "@mui/system";
 
 const Categories = () => {
 
@@ -21,7 +20,7 @@ const Categories = () => {
     <>
       <Container>
         <div>
-          <Typography variant="h5" style={{ marginTop: '15px', textAlign: 'center' }}>Categories</Typography>
+          <Typography variant="h5" style={{ marginTop: '15px' }}>Categories</Typography>
           <div style={{ width: '80%', margin: '0 auto', marginTop: '30px', textAlign: 'center' }}>
             {data && data.map(item => (
               <Category key={item._id} item={item} updateData={updateData} deleteData={deleteData} />

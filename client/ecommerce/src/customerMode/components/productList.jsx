@@ -7,10 +7,10 @@ const ProductList = ({ products }) => {
     if (products.length === 0) return <p>No products found.</p>;
 
     return (
-        <Container>
+        <Container maxWidth= 'xl'>
             <Grid container spacing={2} sx={{justifyContent: 'flex-start', my: 3}}>
                 {products.map(product => (
-                    <Grid key={product._id} size={{ xs: 12, sm: 6, md: 4 }}>
+                    <Grid key={product._id} size={{ xs: 12, sm: 6, md: 4, xl: 3 }}>
                         <ProductCard product={product} />
                     </Grid>
                 ))}

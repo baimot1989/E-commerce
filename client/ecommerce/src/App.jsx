@@ -10,7 +10,7 @@ import Products from './adminMode/adminPages/products';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Statistics from './adminMode/adminPages/statistics';
 import AppBarRes from './components/appBar';
-import { teal } from '@mui/material/colors';
+import { green, teal, yellow } from '@mui/material/colors';
 import Home from './adminMode/adminPages/home'
 import Footer from './components/footer';
 import MyOrders from './customerMode/customersPages/myOrders';
@@ -24,22 +24,22 @@ import ShoppingCart from './customerMode/components/shopingCart';
 import ModalMassgae from './components/modal';
 
 
-const theme = createTheme({
-  palette: {
-    primary: teal
-  }
-});
-
 // const theme = createTheme({
 //   palette: {
-//     primary: {
-//       main: teal[200],       // Light teal
-//       light: teal[100],      // Even lighter
-//       dark: teal[300],       // Optional darker shade
-//       contrastText: '#004d40' // Dark teal for contrast
-//     }
+//     primary: teal
 //   }
 // });
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: green[500],       // Light green
+      light: green[100],      // Even lighter
+      dark: green[800],       // Optional darker shade
+      contrastText: 'white' // Dark teal for contrast
+    }
+  }
+});
 
 function App() {
 

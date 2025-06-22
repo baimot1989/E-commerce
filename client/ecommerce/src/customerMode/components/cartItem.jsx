@@ -21,7 +21,7 @@ const CartItems = () => {
             <Typography variant="body2" color="text.secondary">
               ${item.price} × {item.quantity}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2"  color={item.inStock == 0 ? "error"  : "black" }>
               In Stock: {item.inStock}
             </Typography>
 

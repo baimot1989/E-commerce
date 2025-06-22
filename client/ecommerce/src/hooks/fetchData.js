@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 // לבדוק מה לעשות אם רידקס
 // 
@@ -12,6 +12,7 @@ export const useFetchData = (url) => {
     const [resp, setResp] = useState({});
     const [error, setError] = useState(null)
     const [isloading, setIsloading] = useState(null)
+    const orderSuccess = useSelector(state => state.cart.orderSuccess)
 
     useEffect(() => {
         setIsloading(true)
@@ -23,13 +24,15 @@ export const useFetchData = (url) => {
             setIsloading(false)
         })
 
-    }, [url, resp])
+    }, [url, resp, orderSuccess])
 
     const addData = async (obj) => {
         setIsloading(true);
         try {
-            const { data } = await axios.post(url, obj, { withCredentials: true });
+            const { statusText ,data } = await axios.post(url, obj, { withCredentials: true });
             setResp(data);
+            setIsloading(false);
+            return statusText
         } catch (error) {
             const message = error.response?.data?.error || 'Request failed';
             setError(message);
@@ -44,6 +47,7 @@ export const useFetchData = (url) => {
         setIsloading(true)
         try {
             const { statusText, data } = await axios.put(`${url}/${id}`, obj, { withCredentials: true });
+            console.log(statusText)
             setIsloading(false)
             setResp(data);
             return statusText
@@ -59,9 +63,10 @@ export const useFetchData = (url) => {
     const deleteData = async (id) => {
         setIsloading(true)
         try {
-            const { data } = await axios.delete(`${url}/${id}`, { withCredentials: true });
+            const { statusText ,data } = await axios.delete(`${url}/${id}`, { withCredentials: true });
             setResp(data);
             setIsloading(false)
+            return statusText
         } catch (error) {
             const message = error.response?.data?.error || 'Request failed';
             setError(message)

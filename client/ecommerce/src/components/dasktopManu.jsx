@@ -61,10 +61,11 @@ const DesktopMenu = () => {
                     return (
 
                         <Button
+                            color="inherit"
                             key={page}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, display: 'block' }}
                             component={Link} to={path}
-                            >
+                        >
                             {page}
                         </Button>
 

@@ -18,11 +18,11 @@ function AppBarRes() {
 
     return (
         <AppBar position="static">
-            <Container maxWidth="xl">
+            <Box sx={{px: 4}}>
                 <Toolbar disableGutters>
                     <Box
                         component={Link}
-                        to={'/'}
+                        to={user?.role === 'admin' ? '/admindash' : '/'}
                     >
                         <Box
                             component="img"
@@ -37,13 +37,13 @@ function AppBarRes() {
                                 borderRadius: '15px'
                             }}
                         />
-
                     </Box>
+
                     {/*   mobile manu */}
                     <MobileMenu />
                     <Box
                         component={Link}
-                        to="/"
+                        to={user?.role === 'admin' ? '/admindash' : '/'}
                         sx={{
                             flexGrow: 1,
                             display: { xs: 'flex', md: 'none' },
@@ -72,7 +72,7 @@ function AppBarRes() {
                         </Box>
                     }
                 </Toolbar>
-            </Container>
+            </Box>
         </AppBar>
     );
 }

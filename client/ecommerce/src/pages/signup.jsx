@@ -19,7 +19,7 @@ const Signup = () => {
             setUserDetile((prev) => ({ ...prev, [name]: value }));
         }
     }
-    
+
     // function fro submit the form
     const heandleSubmit = async (e) => {
         e.preventDefault()
@@ -34,7 +34,7 @@ const Signup = () => {
                 <Typography variant="h4" style={{ textAlign: 'center', margin: '25px' }}>Signup</Typography>
                 <form onSubmit={heandleSubmit} style={{ maxWidth: '800px', width: '60%', margin: '0 auto' }}>
                     <Grid container spacing={2}>
-                        <Grid item size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Typography variant="p" htmlFor="firstName">First Name:</Typography><br />
                             <TextField
                                 fullWidth
@@ -45,7 +45,7 @@ const Signup = () => {
                                 onChange={heandle}
                             />
                         </Grid>
-                        <Grid item size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Typography variant="p" htmlFor="lastName">Last Name:</Typography><br />
                             <TextField
                                 fullWidth
@@ -55,7 +55,7 @@ const Signup = () => {
                                 value={userDetile.lastName}
                                 onChange={heandle} />
                         </Grid>
-                        <Grid item size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Typography variant="p" htmlFor="userName">User Name:</Typography><br />
                             <TextField
                                 fullWidth
@@ -65,7 +65,7 @@ const Signup = () => {
                                 value={userDetile.userName}
                                 onChange={heandle} />
                         </Grid>
-                        <Grid item size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Typography variant="p" htmlFor="password">Password:</Typography><br />
                             <TextField
                                 fullWidth
@@ -75,27 +75,20 @@ const Signup = () => {
                                 value={userDetile.password}
                                 onChange={heandle} />
                         </Grid>
-                        <Grid item size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <FormControlLabel
-                                                            control={
-                                                                <Checkbox
-                                                                    checked={isChecked}
-                                                                    onChange={heandle}
-                                                                    name="ordersAllow"
-                                                                />
-                                                            }
-                                                            label="Allow others see my orders"
-                                                        />
-                            {/* <Typography variant="p" htmlFor="ordersAllow">Allow other to see my orders:</Typography>
-                            <TextField
-                                type="checkbox"
-                                name="ordersAllow"
-                                id="ordersAllow"
-                                checked={isChecked}
-                                onChange={heandle} /> */}
+                                control={
+                                    <Checkbox
+                                        checked={isChecked}
+                                        onChange={heandle}
+                                        name="ordersAllow"
+                                    />
+                                }
+                                label="Allow others see my orders"
+                            />
                         </Grid>
                     </Grid>
-                    <Button variant="contained" type="submit" disabled={isloading} style={{ width: '100%', marginBottom: ' 10px' }}>Signup</Button><br />
+                    <Button variant="contained" type="submit" disabled={isloading} style={{ width: '100%', marginBottom: ' 10px', color: 'white' }}>Signup</Button><br />
                     <Typography variant="subtitle1">Already have account? <Link to={'/login'}>Login</Link></Typography>
                     {error &&
                         <Alert severity="error" style={{ marginBottom: '15px' }}>
