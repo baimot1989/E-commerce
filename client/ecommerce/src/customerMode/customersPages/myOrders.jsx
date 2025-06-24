@@ -80,7 +80,7 @@ const MyOrders = () => {
     ];
 
     return (
-        <Container>
+        <Container sx={{mb: 4}}>
             <Typography variant="h6" align="center" my={2}>
                 My Orders
             </Typography>

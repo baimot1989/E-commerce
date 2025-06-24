@@ -115,7 +115,10 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                         key={item._id}
                         component="form"
                         onSubmit={(e) => updateProduct(e, item._id)}
-                        sx={{ width: { xs: '100%', md: '80%' }, margin: '0 auto', marginTop: '30px' }}
+                        sx={{ 
+                            width: { xs: '100%', md: '80%' },
+                             margin: '0 auto', marginTop: '30px',
+                             }}
                     >
                         <Paper style={{ padding: '25px', backgroundColor: '#e3e6f0' }}>
                             <Typography variant="h6" gutterBottom>
@@ -190,7 +193,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                         <img
                                             src={productForms[item._id].imageSrc}
                                             alt="Preview"
-                                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover', marginBottom: '15px' }}
+                                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
                                         />
                                     )}
                                 </Grid>
@@ -217,7 +220,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                 </Grid>
 
                                 <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', gap: '12px', alignItems: 'end', justifyContent: 'flex-end' }}>
-                                    <Button type="submit" name="save" variant="contained" color="primary">
+                                    <Button type="submit" name="save" variant="contained" sx={{backgroundColor: '#212121'}} >
                                         Save
                                     </Button>
                                     <Button

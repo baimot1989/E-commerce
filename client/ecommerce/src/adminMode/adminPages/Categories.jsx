@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useFetchData } from "../../hooks/fetchData";
 import Category from "../components/category";
-import { Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { justifyContent, width } from "@mui/system";
 
 const Categories = () => {
 
@@ -25,7 +26,7 @@ const Categories = () => {
             {data && data.map(item => (
               <Category key={item._id} item={item} updateData={updateData} deleteData={deleteData} />
             ))}
-            <div style={{ display: 'flex', gap: '1rem', width: '70%', margin: ' 10px auto' }}>
+            <Box style={{ display: 'flex', gap: '1rem', margin: ' 10px auto', justifyContent: 'space-between', width: '73%' }}>
               <TextField
                 fullWidth
                 label="category"
@@ -34,8 +35,8 @@ const Categories = () => {
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
               />
-              <Button style={{ paddingLeft: '35px', paddingRight: '35px' }} variant="contained" color="primary" onClick={addCategory}>Add</Button>
-            </div>
+              <Button sx={{ width: '50%' }} variant="contained" color="primary" onClick={addCategory}>Add</Button>
+            </Box>
           </div>
         </div>
       </Container>

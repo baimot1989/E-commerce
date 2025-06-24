@@ -40,7 +40,7 @@ const Home = () => {
     const classes = useStyles();
     return (
         <>
-            <Container style={{margin: 'auto'}}>
+            <Container style={{margin: 'auto', paddingTop: '70px'}}>
                 <Grid container spacing={2}>
                     {pages.map(page => (
                         <Grid key={page.name} size={{ xs: 12, sm: 6, md: 3 }}>

@@ -96,6 +96,15 @@ const MobileMenu = () => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+    const style = {
+        width: { xs: '150px', sm: '200px' },
+        textDecoration: 'none',
+        color: 'black',
+        '&:hover': {
+            color: 'white',
+            backgroundColor: 'black',
+        },
+    }
 
     return (
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -127,15 +136,14 @@ const MobileMenu = () => {
                             : `/${basePath}/${cleanString(page)}`;
 
                         return (
-                            <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                <Typography sx={{ textAlign: 'center' }}>
-                                    <Link
-                                        to={path}
-                                        style={{ textDecoration: 'none', color: 'black' }}
+                            <MenuItem key={page} onClick={handleCloseNavMenu} sx={style}>
+                                <Box
+                                    component={Link}
+                                    to={path}
+                                    sx={style}
                                     >
-                                        {page}
-                                    </Link>
-                                </Typography>
+                                    {page}
+                                </Box>
                             </MenuItem>
                         );
                     })

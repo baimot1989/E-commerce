@@ -50,14 +50,23 @@ const ShoppingCart = () => {
       anchor="left"
       open={cartOpen}
       onClose={handleClose}
+      ModalProps={{
+        keepMounted: true, // improves performance on mobile
+      }}
       sx={{
+        zIndex: 1300, // Higher than AppBar and Footer if needed
         '& .MuiDrawer-paper': {
           width: {
-            xs: '93%', // small screens (mobile)
-            sm: 400,   // tablets
-            md: 600,   // desktops and up
-          }, padding: 2
-        }
+            xs: '93%',
+            sm: 400,
+            md: 600,
+          },
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2,
+          boxSizing: 'border-box',
+        },
       }}
     >
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

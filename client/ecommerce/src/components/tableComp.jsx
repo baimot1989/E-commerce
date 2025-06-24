@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#212121',
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {

@@ -17,7 +17,7 @@ function AppBarRes() {
     const user = useSelector((state) => state.auth.user);
 
     return (
-        <AppBar position="static">
+        <AppBar position="sticky">
             <Box sx={{px: 4}}>
                 <Toolbar disableGutters>
                     <Box
@@ -30,7 +30,6 @@ function AppBarRes() {
                             alt="NextG"
                             sx={{
                                 display: { xs: 'none', md: 'flex' },
-                                mr: 1,
                                 width: { md: 96 },
                                 objectFit: 'cover',
                                 mr: 2,

@@ -57,6 +57,7 @@ const Category = ({ item, updateData, deleteData }) => {
                 <Button
                   variant="contained"
                   color="primary"
+                  sx={{backgroundColor: '#212121'}}
                   onClick={() => startEditing(item)}
                 >
                   Update

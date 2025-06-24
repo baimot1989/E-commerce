@@ -3,14 +3,6 @@ import { Label, Pie, PieChart, Tooltip, Legend, ResponsiveContainer } from "rech
 import { useFetchData } from "../../hooks/fetchData";
 import { Container, Typography } from "@mui/material";
 
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "hsl(var(--chart-1))" },
-    { browser: "safari", visitors: 200, fill: "hsl(var(--chart-2))" },
-    { browser: "firefox", visitors: 287, fill: "hsl(var(--chart-3))" },
-    { browser: "edge", visitors: 173, fill: "hsl(var(--chart-4))" },
-    { browser: "other", visitors: 190, fill: "hsl(var(--chart-5))" },
-]
-
 const PieChartTotalSales = () => {
 
     // Fetch products from API

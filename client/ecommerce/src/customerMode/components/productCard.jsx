@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
 
                     image={product.imageSrc}
                     alt={product.title}
-                    sx={{ objectFit: 'contain', maxHeight: 194 }}
+                    sx={{ objectFit: 'contain', maxHeight: 194, height:{md: 114, sm:94} }}
                 />
                 <CardContent>
                     <Box
@@ -60,13 +60,13 @@ const ProductCard = ({ product }) => {
                     </Box>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'space-around' }}>
-                    <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' }, color: 'white' }}>Add to cart</Button>
+                    <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' }, color: 'white', backgroundColor: '#212121' }}>Add to cart</Button>
                     <Button
                         variant="contained"
                         component={Link}
                         to={`/customerdash/product/${product.title}`}
                         state={product}
-                        sx={{ fontSize: { md: '12px' }, color: 'white' }}
+                        sx={{ fontSize: { md: '12px' }, color: 'white', backgroundColor: '#212121' }}
                     >
                         Read More
                     </Button>

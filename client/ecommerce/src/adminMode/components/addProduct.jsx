@@ -123,7 +123,7 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Button type="submit" variant="contained">Save</Button>
+                            <Button type="submit" variant="contained" sx={{backgroundColor: '#212121'}}>Save</Button>
                         </Grid>
                     </Grid>
                 </Paper>

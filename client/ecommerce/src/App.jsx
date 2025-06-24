@@ -10,7 +10,7 @@ import Products from './adminMode/adminPages/products';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Statistics from './adminMode/adminPages/statistics';
 import AppBarRes from './components/appBar';
-import { green, teal, yellow } from '@mui/material/colors';
+import { green, teal, yellow, red, indigo } from '@mui/material/colors';
 import Home from './adminMode/adminPages/home'
 import Footer from './components/footer';
 import MyOrders from './customerMode/customersPages/myOrders';
@@ -22,6 +22,7 @@ import CustomerRoute from './components/ProtectionRoute/customerRoute';
 import AdminRoute from './components/ProtectionRoute/adminRoute';
 import ShoppingCart from './customerMode/components/shopingCart';
 import ModalMassgae from './components/modal';
+import { Box } from '@mui/material';
 
 
 // const theme = createTheme({
@@ -33,9 +34,9 @@ import ModalMassgae from './components/modal';
 const theme = createTheme({
   palette: {
     primary: {
-      main: green[500],       // Light green
-      light: green[100],      // Even lighter
-      dark: green[800],       // Optional darker shade
+      main: indigo[700],       // Light indigo
+      light: indigo[100],      // Even lighter
+      dark: indigo[900],       // Optional darker shade
       contrastText: 'white' // Dark teal for contrast
     }
   }
@@ -47,34 +48,46 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         {/* <h1>Next Generation E-Commerce</h1> */}
-        <AppBarRes />
-        <Routes>
-          <Route path='/' element={<HomePage />} />
+        <Box sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          <AppBarRes />
+          <Box sx={{ paddingBottom: '70px' }}>
+            <Routes>
+              <Route path='/' element={<HomePage />} />
 
-          <Route element={<GuestRoute />}>
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<Signup />} />
-          </Route>
-          
-          <Route element={<AdminRoute />} >
-            <Route path='admindash' element={<Home />} />
-            <Route path='admindash/categories' element={<Categories />} />
-            <Route path='admindash/customers' element={<Customers />} />
-            <Route path='admindash/products' element={<Products />} />
-            <Route path='admindash/statistics' element={<Statistics />} />
-          </Route>
+              <Route element={<GuestRoute />}>
+                <Route path='/login' element={<Login />} />
+                <Route path='/signup' element={<Signup />} />
+              </Route>
 
-          <Route element={<CustomerRoute />} >
-            <Route path='customerdash' element={<ProductsCatlog />} />
-            <Route path='customerdash/products' element={<ProductsCatlog />} />
-            <Route path='customerdash/myorders' element={<MyOrders />} />
-            <Route path='customerdash/myaccount' element={<MyAccount />} />
-            <Route path='customerdash/product/:id' element={<ProductPage />} />
-          </Route>
-        </Routes>
-        <ModalMassgae />
-        <ShoppingCart />
-        <Footer />
+              <Route element={<AdminRoute />} >
+                <Route path='admindash' element={<Home />} />
+                <Route path='admindash/categories' element={<Categories />} />
+                <Route path='admindash/customers' element={<Customers />} />
+                <Route path='admindash/products' element={<Products />} />
+                <Route path='admindash/statistics' element={<Statistics />} />
+              </Route>
+
+              <Route element={<CustomerRoute />} >
+                <Route path='customerdash' element={<ProductsCatlog />} />
+                <Route path='customerdash/products' element={<ProductsCatlog />} />
+                <Route path='customerdash/myorders' element={<MyOrders />} />
+                <Route path='customerdash/myaccount' element={<MyAccount />} />
+                <Route path='customerdash/product/:id' element={<ProductPage />} />
+              </Route>
+            </Routes>
+            <ModalMassgae />
+            <ShoppingCart />
+          </Box>
+          <Footer />
+        </Box>
+
+
+
+
       </ThemeProvider>
     </>
   )

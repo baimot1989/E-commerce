@@ -8,7 +8,7 @@ import { useState } from "react";
 import styled from '@emotion/styled';
 import Badge from '@mui/material/Badge';
 
-const settings = ['Profile','Logout'];
+const settings = ['My Account', 'Logout'];
 
 const AvaterAndCartBadge = () => {
 
@@ -16,7 +16,7 @@ const AvaterAndCartBadge = () => {
     const firstLetUserName = user.userName[0]
     const totalItemTypes = useSelector(state => state.cart.totalItemTypes);
 
-     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -37,15 +37,27 @@ const AvaterAndCartBadge = () => {
         setAnchorElUser(event.currentTarget);
     };
 
-       const handleLogout = (e) => {
-            if (e.target.innerHTML === 'Logout') {
-                dispatch(clearCart())
-                // persistor.flush()    //  ensures the cleared state is immediately saved
-                //  .flush() returns a Promise — so if needed: use then
-                dispatch(logout());
-                navigate('/')
-            }
-        };
+    const handleLogout = (e) => {
+        if (e.target.innerHTML === 'Logout') {
+            dispatch(clearCart())
+            // persistor.flush()    //  ensures the cleared state is immediately saved
+            //  .flush() returns a Promise — so if needed: use then
+            dispatch(logout());
+            navigate('/')
+        }
+        if (e.target.innerHTML === 'My Account') {
+            console.log(e.target.innerHTML)
+            navigate('/customerdash/myaccount')
+        }
+    };
+
+    const style = {
+        width: { xs: '150px', sm: '200px' },
+        '&:hover': {
+            color: 'white',
+            backgroundColor: 'black',
+        },
+    }
 
     return (
         <>
@@ -82,7 +94,7 @@ const AvaterAndCartBadge = () => {
                         onClose={handleCloseUserMenu}
                     >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <MenuItem key={setting} onClick={handleCloseUserMenu} sx={style}>
                                 <Typography onClick={(e) => handleLogout(e)} sx={{ textAlign: 'center' }}>{setting}</Typography>
                             </MenuItem>
                         ))}

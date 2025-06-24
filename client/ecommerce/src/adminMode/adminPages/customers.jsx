@@ -49,7 +49,7 @@ const Customers = () => {
    
     return (
         <>
-            <Container style={{marginBottom: '10px'}}>
+            <Container sx={{mb: 4}}>
                 <Typography variant="h5" style={{ marginTop: '20px', marginBottom: '20px' }}>Customers</Typography>
                 <TableComp  columns={columns} data={customersData} />
             </Container>
