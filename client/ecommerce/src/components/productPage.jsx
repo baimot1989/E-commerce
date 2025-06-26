@@ -68,32 +68,32 @@ const ProductDetail = () => {
     };
 
     const { id } = useParams();
-   const location = useLocation();
-   const product = location.state;
-   const error = useSelector((state) => state.cart.error);
+    const location = useLocation();
+    const product = location.state;
+    const error = useSelector((state) => state.cart.error);
     const success = useSelector((state) => state.cart.success);
-   const previousPrice = product.price + Number(Math.floor(product.price*(15/100)))
+    const previousPrice = product.price + Number(Math.floor(product.price * (15 / 100)))
 
-   const addToCart = () => {
-    dispatch(addItem(product));
-};
-    
-      useEffect(() => {
-          if (error) {
+    const addToCart = () => {
+        dispatch(addItem(product));
+    };
+
+    useEffect(() => {
+        if (error) {
             dispatch(setModalMassgae(error));
             dispatch(setOpenModal());
             dispatch(clearCartError());
-          } else if (success) {
+        } else if (success) {
             dispatch(setModalMassgae('המוצר נוסף בהצלחה'));
             dispatch(setOpenModal());
             dispatch(clearCartSuccess());
-          }
-        }, [error, success, dispatch]);
-   
-   
+        }
+    }, [error, success, dispatch]);
+
+
     return (
         <Container>
-            <Typography variant="h4" sx={{textAlign: 'start', my: 2}}> Product detail</Typography>
+            <Typography variant="h4" sx={{ textAlign: 'start', my: 2 }}> Product detail</Typography>
             <Grid container spacing={4} >
 
                 {/* Image Gallery */}
@@ -108,7 +108,7 @@ const ProductDetail = () => {
 
                 {/* Product Info */}
                 <Grid size={{ xs: 12, md: 6 }}>
-                    <Box sx={{minHeight: '320px', maxHeight: '500px', height: '70vh'}}>
+                    <Box sx={{ minHeight: '320px', maxHeight: '500px', height: '70vh' }}>
                         <Typography variant="h5" fontWeight="bold">
                             {product.title}
                         </Typography>
@@ -137,7 +137,12 @@ const ProductDetail = () => {
                                 ${previousPrice}
                             </Typography>
                         </Typography>
-
+                        <Typography sx={{color: product.inStock === 0 ? 'red': 'black' }}>
+                            {product.inStock === 0 ? 'out of stock' : `In stock: ${product.inStock}`}
+                        </Typography>
+                        <Typography>
+                            {product.bought === 0 ? null : `bought: ${product.bought}`}
+                        </Typography>
                         <Typography mt={2} color="text.secondary">
                             {product.description}
                         </Typography>
@@ -146,8 +151,9 @@ const ProductDetail = () => {
                     {/* Actions */}
                     <Stack direction="row" spacing={2} my={3}>
                         <Button
-                        sx={{color: 'white'}}
+                            sx={{ color: 'white' }}
                             variant="contained"
+                            disabled={product.inStock === 0}
                             color="primary"
                             // startIcon={}
                             fullWidth

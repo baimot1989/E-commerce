@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema(
         description: String,
         imageSrc: String,
         inStock: Number,
+        bought: Number,
         boughtBy: []
     },
     { versionKey: false }

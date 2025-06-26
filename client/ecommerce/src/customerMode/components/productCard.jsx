@@ -32,8 +32,17 @@ const ProductCard = ({ product }) => {
         <>
             <Card>
                 <CardHeader
-                    title={product.title}
+                    title={
+                        <Typography
+                            noWrap
+                            sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' , width: '80%'}}
+                            variant="h6"
+                        >
+                            {product.title}
+                        </Typography>
+                    }
                     subheader={`Category: ${product.category}`}
+
                 />
                 <CardMedia
                     component="img"
@@ -41,7 +50,7 @@ const ProductCard = ({ product }) => {
 
                     image={product.imageSrc}
                     alt={product.title}
-                    sx={{ objectFit: 'contain', maxHeight: 194, height:{md: 114, sm:94} }}
+                    sx={{ objectFit: 'contain', maxHeight: 194, height: { md: 94, lg: 100, xl: 350 } }}
                 />
                 <CardContent>
                     <Box
@@ -56,11 +65,17 @@ const ProductCard = ({ product }) => {
                         <Typography color={product.inStock == 0 ? "error" : "black"}>
                             {product.inStock == 0 ? 'out of stock' : `In stock: ${product.inStock}`}
                         </Typography>
-                        <Typography>{'Bought: 43'}</Typography>
+                        <Typography>{product.bought ? `bought: ${product.bought}` : null}</Typography>
                     </Box>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'space-around' }}>
-                    <Button onClick={addToCart} variant="contained" sx={{ fontSize: { md: '12px' }, color: 'white', backgroundColor: '#212121' }}>Add to cart</Button>
+                    <Button
+                        onClick={addToCart}
+                        variant="contained"
+                        disabled={product.inStock === 0}
+                        sx={{ fontSize: { md: '12px' }, color: 'white', backgroundColor: '#212121' }}
+                    >
+                        Add to cart</Button>
                     <Button
                         variant="contained"
                         component={Link}

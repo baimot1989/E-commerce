@@ -1,13 +1,10 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import AdbIcon from '@mui/icons-material/Adb';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import AvaterAndCartBadge from './avatar&CartBadge';
-import { Box, IconButton } from '@mui/material';
+import AvaterAndCartBadge from './avatarAndCartBadge';
+import { Box} from '@mui/material';
 import DesktopMenu from './dasktopManu';
 import MobileMenu from './mobileManu';
 import myImage from '../assets/nGsLogo2.png'

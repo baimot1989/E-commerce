@@ -1,6 +1,7 @@
 
 import {
     Alert,
+    Box,
     Button,
     Checkbox,
     Container,
@@ -14,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFetchData } from "../../hooks/fetchData"; // Custom hook for making API requests
 import { updateUser } from "../../redux/auth/authSlice"; // Redux action to update the user
 import { useState } from "react";
+import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
 
 
 const MyAccount = () => {
@@ -52,7 +54,9 @@ const MyAccount = () => {
         const status = await updateData(user._id, userDetails);
         if (status === 'OK') {
             dispatch(updateUser(userDetails)); // Update Redux store
-            alert("Profile updated successfully!");
+            // alert("Profile updated successfully!");
+            dispatch(setModalMassgae('Profile updated successfully!'));
+            dispatch(setOpenModal());
 
             // Clear password input after successful update
             setUserDetails((prev) => ({ ...prev, password: '' }));
@@ -62,7 +66,8 @@ const MyAccount = () => {
     return (
         <>
             <Container>
-                <form
+                <Box
+                    component='form'
                     onSubmit={handleSubmit}
                     style={{ width: '70%', margin: '0 auto', marginBottom: '20px' }}
                 >
@@ -136,7 +141,7 @@ const MyAccount = () => {
                     >
                         {isloading ? 'Saving...' : 'Save'}
                     </Button>
-                </form>
+                </Box>
                 {error && (
                     <Alert severity="error" style={{ marginBottom: '15px' }}>
                         {error}

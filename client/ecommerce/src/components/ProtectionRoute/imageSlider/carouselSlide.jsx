@@ -4,14 +4,14 @@ import { Box, Typography, Paper } from "@mui/material";
 const CarouselSlide = ({ content }) => {
     
     return (
-        <Paper elevation={3} sx={{ overflow: "hidden", borderRadius: 3, height: {sm: 235, xl: 350} }}>
+        <Paper elevation={3} sx={{ overflow: "hidden", borderRadius: 3, height: {xs: 280, md: 215, xl: 300} }}>
           <Box
             component="img"
             src={content.imgSrc}
             alt={content.title}
             sx={{
               width: "100%",
-              height: { xs: 200, sm: 200, xl: 350  },
+              height: { xs: 200, md: 180, xl: 250  },
               objectFit: 'contain'
             }}
           />

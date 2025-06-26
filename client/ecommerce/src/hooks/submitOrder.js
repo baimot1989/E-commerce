@@ -40,10 +40,15 @@ export const useSubmitOrder = () => {
           boughtBy: [...(item.boughtBy || []), {
             fullName: `${user.firstName} ${user.lastName}`,
             quantity: item.quantity,
+            bought: item.bought+item.quantity,
             date: getDate(),
           }],
           inStock: item.inStock - item.quantity,
         };
+        if(user.allowOthersToSeeOrders){
+          updatedProduct.bought = item.bought+item.quantity;
+        }
+        console.log(updatedProduct)
         return updateData(item._id, updatedProduct);
       });
 

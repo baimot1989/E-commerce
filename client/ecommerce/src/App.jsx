@@ -1,96 +1,97 @@
-
 import { Routes, Route } from 'react-router-dom';
-import Login from './pages/login'
+import { Box } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { indigo } from '@mui/material/colors';
+
+// Layout
+import AppBarRes from './components/appBar';
+import Footer from './components/footer';
+import ModalMassgae from './components/modal';
+import ShoppingCart from './customerMode/components/shopingCart';
+
+// Public Pages
+import HomePage from './pages/homePage';
+import Login from './pages/login';
 import Signup from './pages/signup';
-import HomePage from './pages/homePage'
-import CustomerDashboard from './pages/customerDashboard';
+import NotFound from './pages/notFound';
+
+// Admin Pages
+import Home from './adminMode/adminPages/home';
 import Categories from './adminMode/adminPages/Categories';
 import Customers from './adminMode/adminPages/customers';
 import Products from './adminMode/adminPages/products';
-import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Statistics from './adminMode/adminPages/statistics';
-import AppBarRes from './components/appBar';
-import { green, teal, yellow, red, indigo } from '@mui/material/colors';
-import Home from './adminMode/adminPages/home'
-import Footer from './components/footer';
+
+// Customer Pages
+import ProductsCatlog from './customerMode/customersPages/productsCatlog';
 import MyOrders from './customerMode/customersPages/myOrders';
 import MyAccount from './customerMode/customersPages/myAccount';
-import ProductsCatlog from './customerMode/customersPages/productsCatlog';
 import ProductPage from './components/productPage';
+
+// Protected Routes
 import GuestRoute from './components/ProtectionRoute/guestRoute';
 import CustomerRoute from './components/ProtectionRoute/customerRoute';
 import AdminRoute from './components/ProtectionRoute/adminRoute';
-import ShoppingCart from './customerMode/components/shopingCart';
-import ModalMassgae from './components/modal';
-import { Box } from '@mui/material';
 
-
-// const theme = createTheme({
-//   palette: {
-//     primary: teal
-//   }
-// });
-
+// Theme Setup
 const theme = createTheme({
   palette: {
     primary: {
-      main: indigo[700],       // Light indigo
-      light: indigo[100],      // Even lighter
-      dark: indigo[900],       // Optional darker shade
-      contrastText: 'white' // Dark teal for contrast
+      main: indigo[700],
+      light: indigo[100],
+      dark: indigo[900],
+      contrastText: 'white'
     }
   }
 });
 
 function App() {
-
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        {/* <h1>Next Generation E-Commerce</h1> */}
-        <Box sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
-          <AppBarRes />
-          <Box sx={{ paddingBottom: '70px' }}>
-            <Routes>
-              <Route path='/' element={<HomePage />} />
+    <ThemeProvider theme={theme}>
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <AppBarRes />
 
-              <Route element={<GuestRoute />}>
-                <Route path='/login' element={<Login />} />
-                <Route path='/signup' element={<Signup />} />
-              </Route>
+        <Box sx={{ flex: 1, paddingBottom: '70px' }}>
+          <Routes>
+            <Route path='/' element={<HomePage />} />
 
-              <Route element={<AdminRoute />} >
-                <Route path='admindash' element={<Home />} />
-                <Route path='admindash/categories' element={<Categories />} />
-                <Route path='admindash/customers' element={<Customers />} />
-                <Route path='admindash/products' element={<Products />} />
-                <Route path='admindash/statistics' element={<Statistics />} />
-              </Route>
+            {/* Guest-only routes */}
+            <Route element={<GuestRoute />}>
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
+            </Route>
 
-              <Route element={<CustomerRoute />} >
-                <Route path='customerdash' element={<ProductsCatlog />} />
-                <Route path='customerdash/products' element={<ProductsCatlog />} />
-                <Route path='customerdash/myorders' element={<MyOrders />} />
-                <Route path='customerdash/myaccount' element={<MyAccount />} />
-                <Route path='customerdash/product/:id' element={<ProductPage />} />
-              </Route>
-            </Routes>
-            <ModalMassgae />
-            <ShoppingCart />
-          </Box>
-          <Footer />
+            {/* Admin routes */}
+            <Route element={<AdminRoute />}>
+              <Route path='admindash' element={<Home />} />
+              <Route path='admindash/categories' element={<Categories />} />
+              <Route path='admindash/customers' element={<Customers />} />
+              <Route path='admindash/products' element={<Products />} />
+              <Route path='admindash/statistics' element={<Statistics />} />
+            </Route>
+
+            {/* Customer routes */}
+            <Route element={<CustomerRoute />}>
+              <Route path='customerdash' element={<ProductsCatlog />} />
+              <Route path='customerdash/products' element={<ProductsCatlog />} />
+              <Route path='customerdash/myorders' element={<MyOrders />} />
+              <Route path='customerdash/myaccount' element={<MyAccount />} />
+              <Route path='customerdash/product/:id' element={<ProductPage />} />
+            </Route>
+
+            {/* 404 */}
+            <Route path='/*' element={<NotFound />} />
+          </Routes>
+
+          {/* Global Modals and Components */}
+          <ModalMassgae />
+          <ShoppingCart />
         </Box>
 
-
-
-
-      </ThemeProvider>
-    </>
-  )
+        <Footer />
+      </Box>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
