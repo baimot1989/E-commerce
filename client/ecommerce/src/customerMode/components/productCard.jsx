@@ -48,7 +48,7 @@ const ProductCard = ({ product }) => {
                     component="img"
                     height="194"
 
-                    image={product.imageSrc}
+                    image={product.imagesSrc[0]}
                     alt={product.title}
                     sx={{ objectFit: 'contain', maxHeight: 194, height: { md: 94, lg: 100, xl: 350 } }}
                 />

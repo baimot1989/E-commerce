@@ -1,4 +1,5 @@
 import { Box, Button, Container, Grid, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import TableComp from "../../components/tableComp";
 import { useEffect, useState } from "react";
 import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
@@ -22,10 +23,11 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                     title: product.title || '',
                     price: product.price || '',
                     inStock: product.inStock || '',
-                    imageSrc: product.imageSrc || '',
+                    imagesSrc: product.imagesSrc && product.imagesSrc.length > 0 ? product.imagesSrc : [''], // support multiple
                     description: product.description || '',
-                    boughtBy: product.boughtBy 
+                    boughtBy: product.boughtBy || [],
                 };
+
             });
             setProductForms(initialForms);
         }
@@ -41,6 +43,45 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
             setCategoriesById(initialState);
         }
     }, [products, categories]);
+
+    const handleImageChange = (productId, index, value) => {
+        setProductForms(prev => {
+            const updatedImages = [...(prev[productId].imagesSrc || [])];
+            updatedImages[index] = value;
+            return {
+                ...prev,
+                [productId]: {
+                    ...prev[productId],
+                    imagesSrc: updatedImages,
+                }
+            };
+        });
+    };
+    const addImageField = (productId) => {
+        setProductForms(prev => ({
+            ...prev,
+            [productId]: {
+                ...prev[productId],
+                imagesSrc: [...(prev[productId].imagesSrc || []), ''],
+            }
+        }));
+    };
+
+    const removeImageField = (productId, index) => {
+        setProductForms(prev => {
+            const updatedImages = [...(prev[productId].imagesSrc || [])];
+            updatedImages.splice(index, 1);
+            return {
+                ...prev,
+                [productId]: {
+                    ...prev[productId],
+                    imagesSrc: updatedImages,
+                }
+            };
+        });
+    };
+
+
 
     // Handle input changes for form fields of a specific product
     const handleInputChange = (productId, field, value) => {
@@ -71,10 +112,14 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
 
         // Validate form data via passed-in validation function
         const isValid = requestValidation(form);
-        if (!isValid) return;  
+        if (!isValid) return;
 
         // Prepare updated product data including category
-        const updatedProduct = { ...form, category };
+        const updatedProduct = {
+            ...form,
+            category,
+            imagesSrc: form.imagesSrc || [],
+        };
 
         // Send update request to server
         const status = await updateData(id, updatedProduct);
@@ -115,10 +160,10 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                         key={item._id}
                         component="form"
                         onSubmit={(e) => updateProduct(e, item._id)}
-                        sx={{ 
+                        sx={{
                             width: { xs: '100%', md: '80%' },
-                             margin: '0 auto', marginTop: '30px',
-                             }}
+                            margin: '0 auto', marginTop: '30px',
+                        }}
                     >
                         <Paper style={{ padding: '25px', backgroundColor: '#e3e6f0' }}>
                             <Typography variant="h6" gutterBottom>
@@ -176,28 +221,6 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                         ))}
                                     </Select>
                                 </Grid>
-
-                                <Grid size={{ xs: 12, md: 6 }}>
-                                    <TextField
-                                        fullWidth
-                                        label="Image URL"
-                                        variant="outlined"
-                                        value={productForms[item._id]?.imageSrc || ''}
-                                        required
-                                        onChange={(e) => handleInputChange(item._id, 'imageSrc', e.target.value)}
-                                    />
-                                </Grid>
-
-                                <Grid size={{ xs: 12, md: 6 }}>
-                                    {productForms[item._id]?.imageSrc && (
-                                        <img
-                                            src={productForms[item._id].imageSrc}
-                                            alt="Preview"
-                                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
-                                        />
-                                    )}
-                                </Grid>
-
                                 <Grid size={{ xs: 12, md: 6 }}>
                                     <TextField
                                         fullWidth
@@ -210,6 +233,49 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                         onChange={(e) => handleInputChange(item._id, 'description', e.target.value)}
                                     />
                                 </Grid>
+                                <Grid size={{ xs: 12, md: 6 }}>
+                                    {(productForms[item._id]?.imagesSrc || []).map((img, index) => (
+                                        <Box key={index} mb={1} display="flex" alignItems="center" gap={1}>
+                                            <TextField
+                                                fullWidth
+                                                label={`Image URL ${index + 1}`}
+                                                variant="outlined"
+                                                value={img}
+                                                onChange={(e) => handleImageChange(item._id, index, e.target.value)}
+                                            />
+                                            {(productForms[item._id]?.imagesSrc.length > 1) && (
+                                                <Button onClick={() => removeImageField(item._id, index)} color="error">
+                                                    Remove
+                                                </Button>
+                                            )}
+                                        </Box>
+                                    ))}
+
+                                    <Button onClick={() => addImageField(item._id)} startIcon={<AddPhotoAlternateIcon />} sx={{ mt: 1 }}>
+                                        Add Another Image
+                                    </Button>
+
+                                </Grid>
+
+                                <Grid size={{ xs: 12, md: 6 }}>
+                                    {(productForms[item._id]?.imagesSrc || []).map((src, i) => (
+                                        <Box
+                                            component='img'
+                                            key={i}
+                                            src={src}
+                                            alt={`Preview ${i}`}
+                                            sx={{
+                                                maxWidth: '300px',
+                                                maxHeight: '300px',
+                                                objectFit: 'contain',
+                                                marginRight: '10px',
+                                                width: { xs: '63px', sm: '140px', xl: '270px', },
+                                                height: 'auto'
+                                            }}
+                                        />
+                                    ))}
+
+                                </Grid>
 
                                 {/* Bought by table */}
                                 <Grid size={{ xs: 12, md: 6 }}>
@@ -220,7 +286,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                 </Grid>
 
                                 <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', gap: '12px', alignItems: 'end', justifyContent: 'flex-end' }}>
-                                    <Button type="submit" name="save" variant="contained" sx={{backgroundColor: '#212121'}} >
+                                    <Button type="submit" name="save" variant="contained" sx={{ backgroundColor: '#212121' }} >
                                         Save
                                     </Button>
                                     <Button

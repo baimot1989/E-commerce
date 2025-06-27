@@ -1,4 +1,6 @@
-import { Box, Button, Container, Grid, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Collapse, Container, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
 import { useDispatch } from "react-redux";
@@ -7,17 +9,44 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
 
     const dispatch = useDispatch();
 
-    const [productDetails, setProductDetiels] = useState({
+    const [showMoreImages, setShowMoreImages] = useState(false);
+    const [productDetails, setProductDetails] = useState({
         title: '',
         price: '',
         inStock: '',
-        imageSrc: '',
         description: '',
-        category: ''
+        category: '',
+        imagesSrc: [''] // Start with one image field
     });
 
+    const handleImageChange = (index, value) => {
+        const updatedImages = [...productDetails.imagesSrc];
+        updatedImages[index] = value;
+        setProductDetails(prev => ({
+            ...prev,
+            imagesSrc: updatedImages
+        }));
+    };
+    const removeImageField = (index) => {
+        const updatedImages = [...productDetails.imagesSrc];
+        updatedImages.splice(index, 1);
+        setProductDetails(prev => ({
+            ...prev,
+            imagesSrc: updatedImages
+        }));
+    };
+
+
+    const addImageField = () => {
+        setProductDetails(prev => ({
+            ...prev,
+            imagesSrc: [...prev.imagesSrc, '']
+        }));
+    };
+
+
     const handleInputChange = (field, value) => {
-        setProductDetiels(prev => ({
+        setProductDetails(prev => ({
             ...prev,
             [field]: value
         }));
@@ -103,13 +132,40 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                             </Select>
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <TextField style={{ backgroundColor: 'whitesmoke' }}
-                                fullWidth
-                                label='Link to pic'
-                                variant='outlined'
-                                value={productDetails?.imageSrc || ''}
-                                onChange={(e) => handleInputChange('imageSrc', e.target.value)}
-                            />
+                            {productDetails.imagesSrc.map((img, index) => (
+                                <Box key={index} mb={1} display="flex" alignItems="center" gap={1}>
+                                    <TextField
+                                        fullWidth
+                                        label={index === 0 ? 'Link to pic' : `Additional image ${index}`}
+                                        variant='outlined'
+                                        value={img}
+                                        onChange={(e) => handleImageChange(index, e.target.value)}
+                                        style={{ backgroundColor: 'whitesmoke' }}
+                                    />
+
+                                    {/* Show remove button only if more than one image */}
+                                    {productDetails.imagesSrc.length > 1 && (
+                                        <IconButton
+                                            onClick={() => removeImageField(index)}
+                                            aria-label="remove image"
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    )}
+                                </Box>
+                            ))}
+
+                            <Box display="flex" alignItems="center" mt={1}>
+                                <Typography variant="subtitle1" sx={{ mr: 1 }}>
+                                    Add another image
+                                </Typography>
+                                <IconButton
+                                    onClick={addImageField}
+                                    aria-label="add more imagesSrc"
+                                >
+                                    <AddPhotoAlternateIcon />
+                                </IconButton>
+                            </Box>
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField style={{ backgroundColor: 'whitesmoke' }}
@@ -123,7 +179,7 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Button type="submit" variant="contained" sx={{backgroundColor: '#212121'}}>Save</Button>
+                            <Button type="submit" variant="contained" sx={{ backgroundColor: '#212121' }}>Save</Button>
                         </Grid>
                     </Grid>
                 </Paper>

@@ -13,12 +13,11 @@ const Products = () => {
     const [addOrUpdate, setAddOrUpdate] = useState(false);
 
      const requestValidation = (formValues) => {
-        const { title, price, imageSrc, description, category, inStock } = formValues
+        const { title, price, imagesSrc, description, category, inStock } = formValues
 
         if (
             title.trim() === '' ||
             price === '' ||
-            imageSrc.trim() === '' ||
             description.trim() === '' ||
             category === '' ||
             inStock === ''

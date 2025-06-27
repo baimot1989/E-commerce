@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from 'react-router-dom';
 import {
     Box,
@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import ReactImageGallery from "react-image-gallery";
 import Rater from "react-rater";
+import { Rating } from '@mui/material';
+
 import "react-image-gallery/styles/css/image-gallery.css";
 import "react-rater/lib/react-rater.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -72,11 +74,23 @@ const ProductDetail = () => {
     const product = location.state;
     const error = useSelector((state) => state.cart.error);
     const success = useSelector((state) => state.cart.success);
-    const previousPrice = product.price + Number(Math.floor(product.price * (15 / 100)))
+    const previousPrice = product.price + Number(Math.floor(product.price * (15 / 100)));
+   
+    const [ images , setImages ] = useState([])
 
     const addToCart = () => {
         dispatch(addItem(product));
     };
+
+   useEffect(() => {
+    const imageProduct = product.imagesSrc.map(img => ({
+        original: img,
+        thumbnail: img
+    }));
+
+    // Example: set state with images
+    setImages(imageProduct);
+}, []);
 
     useEffect(() => {
         if (error) {
@@ -102,7 +116,7 @@ const ProductDetail = () => {
                         showBullets={false}
                         showFullscreenButton={false}
                         showPlayButton={false}
-                        items={productDetailItem.images}
+                        items={images}
                     />
                 </Grid>
 
@@ -114,7 +128,8 @@ const ProductDetail = () => {
                         </Typography>
 
                         <Box display="flex" alignItems="center" mt={1}>
-                            <Rater total={5} interactive={false} rating={3.5} />
+                            <Rating value={3.5} precision={0.5} readOnly />
+
                             <Typography variant="body2" color="gray" ml={2}>
                                 ({150})
                             </Typography>
