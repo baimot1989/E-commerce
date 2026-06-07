@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/auth/authSlice'
+import { login, clearError } from '../redux/auth/authSlice'
 import { Alert, Button, CircularProgress, Container, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
@@ -16,6 +16,7 @@ const Login = () => {
     // const { login, error } = useLogin();
 
     useEffect(() => {
+        dispatch(clearError(null))
         if (auth.user) {
             if (auth.user.role === 'admin')
                 navigate('/admindash/home'); // 👈 redirect to home
@@ -29,6 +30,7 @@ const Login = () => {
         e.preventDefault()
         // login(userName, password);
         dispatch(login({ userName, password }))
+        setMessage(auth.error)
     }
     return (
         <>
@@ -39,7 +41,7 @@ const Login = () => {
 
 
 
-                <form onSubmit={heandleSubmit} style={{ width: '70%', maxWidth: '350px', margin: '0 auto' }}>
+                <Box component="form" onSubmit={heandleSubmit} sx={{ width: { xs: '80%', sm: '70%' }, maxWidth: '350px', margin: '0 auto' }}>
                     {/* For each label+input pair, use a Box with flex display */}
                     <Box
                         sx={{
@@ -51,13 +53,13 @@ const Login = () => {
                             gap: 1,
                         }}
                     >
-                        <Typography variant="p" htmlFor="userName" style={{ minWidth: 100, textAlign: 'right' }}>
-                            User name:
-                        </Typography>
                         <TextField
                             fullWidth
+                            required
                             type="text"
                             name="userName"
+                            label="User name"
+                            variant="outlined"
                             id="userName"
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
@@ -74,13 +76,13 @@ const Login = () => {
                             gap: 1,
                         }}
                     >
-                        <Typography variant="p" htmlFor="password" style={{ minWidth: 100, textAlign: 'right' }}>
-                            Password:
-                        </Typography>
                         <TextField
                             fullWidth
+                            required
                             type="password"
                             name="password"
+                            label="Password"
+                            variant="outlined"
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -89,7 +91,7 @@ const Login = () => {
 
                     <Button variant="contained" type="submit" disabled={auth.loading} style={{ width: '100%', color: 'white' }}>Login</Button>
                     <br />
-                    <Typography variant="subtitle1" style={{marginTop: '10px', textAlign: 'left'}}>
+                    <Typography variant="subtitle1" style={{ marginTop: '10px', textAlign: 'left' }}>
                         New user? <Link to={'/signup'}>Signup</Link>
                     </Typography>
                     {auth.error && (
@@ -97,7 +99,7 @@ const Login = () => {
                             {auth.error}
                         </Alert>
                     )}
-                </form>
+                </Box>
             </Container>
         </>
     );

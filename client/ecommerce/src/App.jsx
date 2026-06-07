@@ -3,6 +3,11 @@ import { Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { indigo } from '@mui/material/colors';
 
+import { useCartHydration } from './hooks/useCartHydration';
+import { useGuestCartPersistence } from './hooks/useGuestCartPersistence';
+import { useUserCartPersistence } from './hooks/useUserCartPersistence';
+import { useCartMergeOnLogin } from './hooks/useCartMergeOnLogin';
+
 // Layout
 import AppBarRes from './components/appBar';
 import Footer from './components/footer';
@@ -32,6 +37,7 @@ import ProductPage from './components/productPage';
 import GuestRoute from './components/ProtectionRoute/guestRoute';
 import CustomerRoute from './components/ProtectionRoute/customerRoute';
 import AdminRoute from './components/ProtectionRoute/adminRoute';
+import PreOrderForm from './customerMode/components/checkout';
 
 // Theme Setup
 const theme = createTheme({
@@ -46,6 +52,12 @@ const theme = createTheme({
 });
 
 function App() {
+
+  useCartHydration();
+  useGuestCartPersistence();
+  useUserCartPersistence();
+  useCartMergeOnLogin();
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -57,6 +69,8 @@ function App() {
 
             {/* Guest-only routes */}
             <Route element={<GuestRoute />}>
+              <Route path='customerdash/products' element={<ProductsCatlog />} />
+              {/* <Route path='customerdash/product/:id' element={<ProductPage />} />   יש בעיה */}
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<Signup />} />
             </Route>
@@ -77,6 +91,7 @@ function App() {
               <Route path='customerdash/myorders' element={<MyOrders />} />
               <Route path='customerdash/myaccount' element={<MyAccount />} />
               <Route path='customerdash/product/:id' element={<ProductPage />} />
+              <Route path='customerdash/preorder' element={<PreOrderForm />} />
             </Route>
 
             {/* 404 */}

@@ -15,14 +15,15 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import styled from "@emotion/styled";
+import CartBadge from "./cartBadge";
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    right: -3,
-    top: 13,
-    padding: "0 4px",
-  },
-}));
+// const StyledBadge = styled(Badge)(({ theme }) => ({
+//   "& .MuiBadge-badge": {
+//     right: -3,
+//     top: 13,
+//     padding: "0 4px",
+//   },
+// }));
 
 const menuOptions = [
   { label: "My Account", action: "account" },
@@ -32,6 +33,7 @@ const menuOptions = [
 const AvaterAndCartBadge = () => {
   const user = useSelector((state) => state.auth.user);
   const totalItemTypes = useSelector((state) => state.cart.totalItemTypes);
+  console.log(totalItemTypes)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -56,21 +58,26 @@ const AvaterAndCartBadge = () => {
       sx={{
         display: "flex",
         minWidth: "100px",
-        justifyContent: user.role === "customer" ? "space-between" : "flex-end",
+        justifyContent: user?.role === "customer" ? "space-between" : "flex-end",
       }}
     >
-      {user.role === "customer" && (
-        <IconButton aria-label="cart" onClick={() => dispatch(openCart())}>
-          <StyledBadge badgeContent={totalItemTypes} color="secondary">
-            <ShoppingCartIcon sx={{ color: "white" }} />
-          </StyledBadge>
-        </IconButton>
+      {console.log(user?.role)}
+      {user?.role === "customer" && (
+        <CartBadge />
+        // <IconButton aria-label="cart" onClick={() => dispatch(openCart())}>
+        //   <StyledBadge badgeContent={totalItemTypes} color="secondary">
+        //     <ShoppingCartIcon sx={{ color: "white" }} />
+        //   </StyledBadge>
+        // </IconButton>
       )}
 
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt={user.userName[0]} />
+            {/* <Avatar alt={user?.userName[0]} /> */}
+            <Avatar>
+              {user?.firstName?.charAt(0).toUpperCase()}
+            </Avatar>
           </IconButton>
         </Tooltip>
         <Menu

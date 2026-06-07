@@ -85,6 +85,8 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
 
     // Handle input changes for form fields of a specific product
     const handleInputChange = (productId, field, value) => {
+        console.log(typeof(value), value)
+    
         setProductForms(prev => ({
             ...prev,
             [productId]: {
@@ -109,6 +111,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
         // Extract current form data for this product
         const form = productForms[id];
         const category = categoriesById[id];
+        console.log(form)
 
         // Validate form data via passed-in validation function
         const isValid = requestValidation(form);
@@ -122,6 +125,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
         };
 
         // Send update request to server
+        console.log(updatedProduct)
         const status = await updateData(id, updatedProduct);
 
         if (status === "OK") {
@@ -190,7 +194,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                             label="Price"
                                             variant="outlined"
                                             value={productForms[item._id]?.price || ''}
-                                            onChange={(e) => handleInputChange(item._id, 'price', e.target.value)}
+                                            onChange={(e) => handleInputChange(item._id, 'price', Number(e.target.value))}
                                         />
                                         <TextField
                                             fullWidth
@@ -198,7 +202,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                             label="inStock"
                                             variant="outlined"
                                             value={productForms[item._id]?.inStock || 0}
-                                            onChange={(e) => handleInputChange(item._id, 'inStock', e.target.value)}
+                                            onChange={(e) => handleInputChange(item._id, 'inStock', Number(e.target.value))}
                                         />
                                     </Box>
                                 </Grid>

@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+
+import { loadCartForUser, saveCartForUser } from '../cart/cartUtils';
+import { mergeCarts } from '../cart/mergeCarts';
+import { setCartItems } from '../cart/cartSlice';
+
 // Define the login endpoint for the backend
 const LOGIN_URL = 'http://localhost:3000/authUser/login';
 const LOGOUT_URL = 'http://localhost:3000/authUser/logout';
@@ -28,8 +33,8 @@ const authSlice = createSlice({
     initialState: {
         // Initial state pulled from localStorage (persisted login)
         user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
-        error: null,      
-        loading: false, 
+        error: null,
+        loading: false,
     },
     reducers: {
         // Sync reducer for logging out
@@ -46,11 +51,14 @@ const authSlice = createSlice({
         },
         updateUser: (state, action) => {
             state.user = {
-              ...state.user,
-              ...action.payload,
+                ...state.user,
+                ...action.payload,
             };
             localStorage.setItem('user', JSON.stringify(state.user));
-          },
+        },
+        clearError: (state, action) => {
+            state.error = action.payload
+        },
     },
     extraReducers: (builder) => {
         // Handle pending, fulfilled, and rejected cases of the login thunk
@@ -63,13 +71,36 @@ const authSlice = createSlice({
             })
 
             // When login is successful
-            .addCase(login.fulfilled, (state, action) => {
-                state.loading = false;        // Stop loading
-                state.user = action.payload;    // Store user data
-                state.error = null;           // Clear errors
+            // .addCase(login.fulfilled, (state, action) => {
+            //     state.loading = false;        // Stop loading
+            //     state.user = action.payload;    // Store user data
+            //     state.error = null;           // Clear errors
 
-                // Persist user and token to localStorage
+            //     // Persist user and token to localStorage
+            //     localStorage.setItem('user', JSON.stringify(action.payload));
+            // })
+            .addCase(login.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+                state.error = null;
+
                 localStorage.setItem('user', JSON.stringify(action.payload));
+
+                // CART MERGE LOGIC 
+
+                const userId = action.payload._id;
+
+                const guestCart =
+                    JSON.parse(localStorage.getItem("guest_cart")) || [];
+
+                const userCart =
+                    loadCartForUser(userId) || [];
+
+                const merged = mergeCarts(guestCart, userCart);
+
+                saveCartForUser(userId, merged);
+
+                localStorage.removeItem("guest_cart");
             })
 
             // When login fails
@@ -78,8 +109,8 @@ const authSlice = createSlice({
                 // Set the error message from the rejected action
                 state.error = action.payload || action.error.message;
             });
-    },
+},
 });
 
-export const { logout, updateUser } = authSlice.actions;
+export const { logout, updateUser, clearError } = authSlice.actions;
 export default authSlice.reducer;

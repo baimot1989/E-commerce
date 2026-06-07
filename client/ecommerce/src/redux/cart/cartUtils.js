@@ -1,5 +1,7 @@
 
 // redux/cart/loadCartForUser.js
+
+// localStorage פונקציה שטוענת את העגלת קניות של משתמש במערכת מה 
 export const loadCartForUser = (userId) => {
   try {
     const raw = localStorage.getItem(`cart_${userId}`);
@@ -11,7 +13,9 @@ export const loadCartForUser = (userId) => {
   }
 };
 
+// localStorage פונקציה ששומרת את העגלת קניות של משתמש במערכת ב
 export const saveCartForUser = (userId, cartItems) => {
+  console.log(cartItems)
   try {
     localStorage.setItem(`cart_${userId}`, JSON.stringify(cartItems));
   } catch (err) {

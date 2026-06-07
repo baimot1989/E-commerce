@@ -10,6 +10,7 @@ export const useLogin = () => {
 
     const login = async (userName, password) => {
 
+        console.log('hello')
         setError(null)
 
         try {

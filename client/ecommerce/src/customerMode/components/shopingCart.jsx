@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { calcSubtotal, closeCart, setCartItems, totalItem } from '../../redux/cart/cartSlice'
 import { loadCartForUser, saveCartForUser } from '../../redux/cart/cartUtils'
 import { useSubmitOrder } from '../../hooks/submitOrder'
+import { Link } from 'react-router-dom'
 
 
 const ShoppingCart = () => {
@@ -35,7 +36,7 @@ const ShoppingCart = () => {
             dispatch(totalItem());
             dispatch(calcSubtotal())
           }
-        }, [cartItems, user?.id])
+        }, [cartItems, user?._id])
 
 
   const handleClose = () => {
@@ -92,7 +93,8 @@ const ShoppingCart = () => {
       {/* Checkout Button */}
       <Button
         disabled={isloading}
-        onClick={()=> submitOrder()}
+        component={Link} to={'/customerdash/preorder'}
+        // onClick={()=> submitOrder()}
         variant="contained"
         color="primary"
         fullWidth

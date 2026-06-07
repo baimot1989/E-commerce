@@ -9,16 +9,18 @@ export const useSignup = () => {
     const navigate = useNavigate();
 
     const signup = async (obj) => {
-        
+
         setIsloading(true)
         setError(null)
 
         try {
+            // if(obj.password == obj.confirmPassword) {
+            //     throw new Error("Passwords do not match");
+            // }
             const { data } = await axios.post('http://localhost:3000/authUser/singup', obj);
             setIsloading(false);
             navigate('/login')
         } catch (error) {
-           
             const message = error.response?.data?.error || 'Signup failed';
             setIsloading(false);
             setError(message);

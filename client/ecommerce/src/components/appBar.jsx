@@ -4,10 +4,11 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AvaterAndCartBadge from './avatarAndCartBadge';
-import { Box} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import DesktopMenu from './dasktopManu';
 import MobileMenu from './mobileManu';
 import myImage from '../assets/nGsLogo2.png'
+import CartBadge from './cartBadge';
 function AppBarRes() {
 
 
@@ -15,10 +16,11 @@ function AppBarRes() {
 
     return (
         <AppBar position="sticky">
-            <Box sx={{px: 4}}>
+            <Box sx={{ px: 4 }}>
                 <Toolbar disableGutters>
                     <Box
                         component={Link}
+                        sx={{ display: 'flex' }}
                         to={user?.role === 'admin' ? '/admindash' : '/'}
                     >
                         <Box
@@ -34,9 +36,13 @@ function AppBarRes() {
                             }}
                         />
                     </Box>
+                    {!user && (
+                        <Typography sx={{ color: 'white', display: {xs: 'none', md: 'block' }, marginTop: '12px', fontSize: '14px' }}>Hello guest</Typography>
+                    )}
+
 
                     {/*   mobile manu */}
-                    <MobileMenu />
+                    {user && (<MobileMenu />)}
                     <Box
                         component={Link}
                         to={user?.role === 'admin' ? '/admindash' : '/'}
@@ -57,14 +63,24 @@ function AppBarRes() {
                                 display: 'block',
                             }}
                         />
+                        {!user && (
+                            <Typography sx={{ color: 'white', display: { md: 'none', sm: 'none' }, marginTop: '12px', fontSize: '14px', marginLeft: '8px' }}>Hello guest</Typography>
+                        )}
                     </Box>
+
                     {/*  dasktop manu */}
                     <DesktopMenu />
                     {user ? <AvaterAndCartBadge />
                         :
                         <Box sx={{ display: 'flex', gap: 1 }} >
-                            <Button color="inherit" component={Link} to={'/login'}>Login</Button>
-                            <Button color="inherit" component={Link} to={'/signup'}>Signup</Button>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <CartBadge />
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end' }}>
+                                <Button sx={{ fontSize: '12px' }} color="inherit" component={Link} to={'/login'}>Login</Button>
+                                <Button sx={{ fontSize: '12px' }} color="inherit" component={Link} to={'/signup'}>Signup</Button>
+                            </Box>
+
                         </Box>
                     }
                 </Toolbar>

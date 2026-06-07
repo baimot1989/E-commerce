@@ -11,7 +11,7 @@ const Footer = () => {
                     width: '100%',
                     backgroundColor: 'primary.main',
                     color: 'white',
-                    py: 2,
+                    py: 1,
                     textAlign: 'center',
                     display: 'flex',
                     justifyContent: 'center',

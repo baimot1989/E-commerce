@@ -3,14 +3,25 @@ import { Link } from "react-router-dom";
 import { useSignup } from "../hooks/useSignup"
 import { useSelector } from 'react-redux';
 import { Grid, Container, TextField, Typography, Button, Alert, FormControlLabel, Checkbox } from "@mui/material";
+import { Box } from "@mui/system";
 
 const Signup = () => {
     // state
-    const [userDetile, setUserDetile] = useState({ firstName: '', lastName: '', userName: '', password: '' })
+    const [userDetile, setUserDetile] = useState(
+        {
+            firstName: '',
+            lastName: '',
+            userName: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        })
     const [isChecked, setIsChecked] = useState(false);
+    const [message, setMessage] = useState(null);
 
     //useSignup properties
     const { signup, error, isloading } = useSignup()
+
     const heandle = (e) => {
         const { name, value, type, checked } = e.target;
         if (type === "checkbox") {
@@ -25,6 +36,8 @@ const Signup = () => {
         e.preventDefault()
         userDetile.allowOthersToSeeOrders = isChecked
         signup(userDetile);
+        setMessage(error)
+
     }
 
 
@@ -32,47 +45,80 @@ const Signup = () => {
         <>
             <Container>
                 <Typography variant="h4" style={{ textAlign: 'center', margin: '25px' }}>Signup</Typography>
-                <form onSubmit={heandleSubmit} style={{ maxWidth: '800px', width: '60%', margin: '0 auto' }}>
+                <Box component="form" onSubmit={heandleSubmit} sx={{ maxWidth: '800px', width:{xs: '80%', sm: '60%' } , margin: '0 auto'}}>
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Typography variant="p" htmlFor="firstName">First Name:</Typography><br />
                             <TextField
                                 fullWidth
+                                required
                                 type="text"
                                 name="firstName"
+                                label="First Name"
+                                variant="outlined"
                                 id="firstName"
                                 value={userDetile.firstName}
                                 onChange={heandle}
                             />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Typography variant="p" htmlFor="lastName">Last Name:</Typography><br />
                             <TextField
                                 fullWidth
+                                required
                                 type="text"
                                 name="lastName"
+                                label="Last Name"
+                                variant="outlined"
                                 id="lastName"
                                 value={userDetile.lastName}
                                 onChange={heandle} />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Typography variant="p" htmlFor="userName">User Name:</Typography><br />
+
                             <TextField
                                 fullWidth
+                                required
                                 type="text"
                                 name="userName"
+                                label="User Name"
+                                variant="outlined"
                                 id="userName"
                                 value={userDetile.userName}
                                 onChange={heandle} />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <Typography variant="p" htmlFor="password">Password:</Typography><br />
                             <TextField
                                 fullWidth
+                                required
+                                type="email"
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                id="email"
+                                value={userDetile.email}
+                                onChange={heandle} />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <TextField
+                                fullWidth
+                                required
                                 type="password"
                                 name="password"
+                                label="Password"
+                                variant="outlined"
                                 id="password"
                                 value={userDetile.password}
+                                onChange={heandle} />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <TextField
+                                fullWidth
+                                required
+                                type="password"
+                                name="confirmPassword"
+                                label="Confirm Password"
+                                variant="outlined"
+                                id="confirmPassword"
+                                value={userDetile.confirmPassword}
                                 onChange={heandle} />
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
@@ -95,7 +141,7 @@ const Signup = () => {
                             {error}
                         </Alert>
                     }
-                </form>
+                </Box>
 
             </Container>
         </>
