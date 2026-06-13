@@ -5,9 +5,11 @@ import { setModalMassgae, setOpenModal } from '../../redux/modal/modalSlice';
 import { useDispatch } from 'react-redux';
 import UpdateProducts from '../components/updateProduct';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Products = () => {
-    const { data: products, updateData, addData, deleteData } = useFetchData('http://localhost:3000/products');
-    const { data: categories } = useFetchData('http://localhost:3000/categories');
+    const { data: products, updateData, addData, deleteData } = useFetchData(`${API_URL}/products`);
+    const { data: categories } = useFetchData(`${API_URL}/categories`);
     const dispatch = useDispatch();
 
     const [addOrUpdate, setAddOrUpdate] = useState(false);

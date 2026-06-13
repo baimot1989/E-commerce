@@ -10,15 +10,26 @@ import {
     Button,
     Box,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { display } from "@mui/system";
+import { useSubmitOrder } from "../../hooks/submitOrder";
+import { useFetchData } from "../../hooks/fetchData";
+import { Link, useNavigate } from "react-router-dom";
+import { shippingAddressUpdate } from "../../redux/cart/cartSlice";
+import { useFieldCheck } from "../../hooks/useFieldCheck";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const PreOrderForm = () => {
-       // Get the current user from Redux state
+    // Get the current user from Redux state
     const user = useSelector((state) => state.auth.user);
-    const cartItems = useSelector((state) => state.cart?.cartItems)
-    const subtotal = useSelector((state) => state.cart?.subtotal)
-    console.log(cartItems, subtotal)
+    const navigate = useNavigate();
+    const cartItems = useSelector((state) => state.cart?.cartItems);
+    const subtotal = useSelector((state) => state.cart?.subtotal);
+    const dispatch = useDispatch();
+    const { fieldCheck } = useFieldCheck();
+    const { updateByPatch } = useFetchData(`${API_URL}/users`);
+    const { submitOrder, isloading } = useSubmitOrder()
 
     const [formData, setFormData] = useState({
         firstName: user.firstName,
@@ -26,10 +37,10 @@ const PreOrderForm = () => {
         lastName: user.lastName,
         phoneNumber: user.phoneNumber ? user.phoneNumber : "",
         email: user.email ? user.email : "",
-        streetAddress: "",
-        city: "",
-        state: "",
-        postal: "",
+        streetAddress: user.shippingAddress[0]?.streetAddress ? user.shippingAddress[0].streetAddress : "",
+        city: user.shippingAddress[0]?.city ? user.shippingAddress[0].city : "",
+        state: user.shippingAddress[0]?.state ? user.shippingAddress[0].state : "",
+        postal: user.shippingAddress[0]?.postal ? user.shippingAddress[0].postal : "",
         orderDate: "",
         notes: "",
     });
@@ -44,15 +55,36 @@ const PreOrderForm = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        console.log(formData);
+        const ignoreFields = ["middleName", "orderDate", "notes"];
 
-        // axios.post("/api/preorder", formData)
+        const isValid = fieldCheck(formData, ignoreFields);
+
+        if (!isValid) {
+            const shippingAddress = {
+                phoneNumber: formData.phoneNumber,
+                shippingAddress: [
+                    {
+                        streetAddress: formData.streetAddress,
+                        city: formData.city,
+                        state: formData.state,
+                        postal: formData.postal
+                    }
+                ]
+            }
+
+            dispatch(shippingAddressUpdate(shippingAddress))
+
+            navToPayment();
+        }
+
     };
 
+    const navToPayment = () => navigate('/customerdash/preorder/payment');
+
     return (
-        <Container maxWidth="md" sx={{ py: 5 }}>
+        <Container maxWidth="md" sx={{ py: 5 }} >
             <Paper
                 elevation={4}
                 sx={{
@@ -65,13 +97,10 @@ const PreOrderForm = () => {
                     fontWeight={700}
                     gutterBottom
                 >
-                    Order details
+                    Order summary
                 </Typography>
 
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                >
+                <Box component='form' onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Typography>Full name</Typography>
                         <Grid container size={12}>
@@ -116,7 +145,7 @@ const PreOrderForm = () => {
                                     label="Contact Number"
                                     variant="outlined"
                                     name="phoneNumber"
-                                    value={formData.phone}
+                                    value={formData.phoneNumber}
                                     onChange={handleChange}
                                 />
                             </Grid>
@@ -202,7 +231,7 @@ const PreOrderForm = () => {
                                     return (
                                         <React.Fragment key={item._id}>
                                             <Grid size={{ xs: 12, sm: 6 }}>
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Typography>{`${item.title}`}</Typography>
                                                     <Typography>{`${item.price}$ x${item.quantity}`}</Typography>
                                                 </Box>
@@ -225,12 +254,12 @@ const PreOrderForm = () => {
                                         </React.Fragment>
                                     )
                                 })}
-                                   <Grid size={12}>
-                                                <Box sx={{display: 'flex', justifyContent: 'flex-end', marginTop: '50px', marginRight: '10px'}}>
-                                                    <Typography sx={{ marginRight: '50px'}}> Total</Typography>
-                                                    <Typography>{`${subtotal}$`}</Typography>
-                                                </Box>
-                                            </Grid>
+                                <Grid size={12}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '50px', marginRight: '10px' }}>
+                                        <Typography sx={{ marginRight: '50px' }}> Total</Typography>
+                                        <Typography>{`${subtotal}$`}</Typography>
+                                    </Box>
+                                </Grid>
 
 
                             </Grid>
@@ -250,12 +279,13 @@ const PreOrderForm = () => {
 
                         <Grid size={12}>
                             <Button
+                                disabled={isloading}
                                 type="submit"
                                 variant="contained"
                                 size="large"
                                 fullWidth
                             >
-                                Submit
+                                Continue
                             </Button>
                         </Grid>
                     </Grid>

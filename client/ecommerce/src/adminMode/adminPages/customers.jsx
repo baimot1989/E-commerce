@@ -3,10 +3,13 @@ import Table from "../../components/table";
 import TableComp from "../../components/tableComp";
 import { useFetchData } from "../../hooks/fetchData"
 import { Container, Typography } from "@mui/material";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Customers = () => {
 
-    const { data:users } = useFetchData('http://localhost:3000/users');
-    const { data:products } = useFetchData('http://localhost:3000/products');
+    const { data:users } = useFetchData(`${API_URL}/users`);
+    const { data:products } = useFetchData(`${API_URL}/products`); 
 
     const columns = [ // columns for table component
       { label: "Full Name", accessor: "fullName" },

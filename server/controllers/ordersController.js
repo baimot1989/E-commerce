@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req,res) => {
     try {
-        const orders = await orderService.getAllOrders()
+        const orders = await orderService.getAllOrders();
         res.json(orders)
         
     } catch (error) {

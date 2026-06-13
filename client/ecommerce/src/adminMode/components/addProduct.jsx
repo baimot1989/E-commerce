@@ -72,18 +72,19 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
 
     return (
         <Container>
-            <form onSubmit={(e) => addProduct(e)} style={{ width: '80%', margin: '0 auto', marginTop: '34px' }}>
+            <Box onSubmit={(e) => addProduct(e)} sx={{ width: '80%', margin: '0 auto', marginTop: '34px', marginBottom: '10px' }}>
 
 
-                <Paper style={{ padding: '15px', backgroundColor: '#e3e6f0' }}>
+                <Paper sx={{ padding: '15px', backgroundColor: '#e3e6f0' }}>
                     <Typography variant="h6" gutterBottom>
                         Adding a product:
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, md: 6 }} >
 
-                            <TextField style={{ backgroundColor: 'whitesmoke' }}
+                            <TextField sx={{ backgroundColor: 'whitesmoke' }}
                                 fullWidth
+                                required
                                 label='Titel'
                                 variant='outlined'
                                 value={productDetails?.title || ''}
@@ -92,16 +93,18 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <Box sx={{ display: 'flex', gap: 2 }}>
-                                <TextField style={{ backgroundColor: 'whitesmoke' }}
+                                <TextField sx={{ backgroundColor: 'whitesmoke' }}
                                     fullWidth
+                                    required
                                     type="number"
                                     label='Price'
                                     variant='outlined'
                                     value={productDetails?.price || ''}
                                     onChange={(e) => handleInputChange('price', e.target.value)}
                                 />
-                                <TextField style={{ backgroundColor: 'whitesmoke' }}
+                                <TextField sx={{ backgroundColor: 'whitesmoke' }}
                                     fullWidth
+                                    required
                                     type="number"
                                     label='InStock'
                                     variant='outlined'
@@ -140,7 +143,7 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                                         variant='outlined'
                                         value={img}
                                         onChange={(e) => handleImageChange(index, e.target.value)}
-                                        style={{ backgroundColor: 'whitesmoke' }}
+                                        sx={{ backgroundColor: 'whitesmoke' }}
                                     />
 
                                     {/* Show remove button only if more than one image */}
@@ -168,8 +171,9 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                             </Box>
                         </Grid>
                         <Grid size={{ xs: 12, md: 6 }}>
-                            <TextField style={{ backgroundColor: 'whitesmoke' }}
+                            <TextField sx={{ backgroundColor: 'whitesmoke' }}
                                 fullWidth
+                                required
                                 label='Description'
                                 variant='outlined'
                                 multiline
@@ -183,8 +187,8 @@ const AddProduct = ({ categories, createProduct, addData, requestValidation }) =
                         </Grid>
                     </Grid>
                 </Paper>
-            </form>
-            <div style={{ width: '80%', margin: '15px auto' }}>
+            </Box>
+            <div sx={{ width: '80%', margin: '15px auto' }}>
                 <Button variant="contained" color="error" onClick={createProduct}> cancel</Button>
             </div>
 

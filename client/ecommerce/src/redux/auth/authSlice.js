@@ -7,8 +7,9 @@ import { mergeCarts } from '../cart/mergeCarts';
 import { setCartItems } from '../cart/cartSlice';
 
 // Define the login endpoint for the backend
-const LOGIN_URL = 'http://localhost:3000/authUser/login';
-const LOGOUT_URL = 'http://localhost:3000/authUser/logout';
+const API_URL = import.meta.env.VITE_API_URL;
+const LOGIN_URL = `${API_URL}/authUser/login`;
+const LOGOUT_URL = `${API_URL}/authUser/logout`;
 
 // Create an async thunk for logging in the user
 export const login = createAsyncThunk(
@@ -20,7 +21,7 @@ export const login = createAsyncThunk(
             console.log(data)
         } catch (error) {
             // If there's an error, extract a message from the response
-            const message = error.response?.data?.error || 'Signup failed';
+            const message = error.response?.data?.error || 'Login failed';
             // Reject the thunk with a custom error message
             return thunkAPI.rejectWithValue(message);
         }
@@ -59,6 +60,10 @@ const authSlice = createSlice({
         clearError: (state, action) => {
             state.error = action.payload
         },
+        resetAuth: (state) => {
+            state.loading = false;
+            state.error = null;
+        }
     },
     extraReducers: (builder) => {
         // Handle pending, fulfilled, and rejected cases of the login thunk
@@ -109,8 +114,9 @@ const authSlice = createSlice({
                 // Set the error message from the rejected action
                 state.error = action.payload || action.error.message;
             });
-},
+
+    },
 });
 
-export const { logout, updateUser, clearError } = authSlice.actions;
+export const { logout, updateUser, clearError, resetAuth } = authSlice.actions;
 export default authSlice.reducer;

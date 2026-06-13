@@ -1,5 +1,8 @@
-# Ignore server node_modules
-server/node_modules/
 
-# Ignore client node_modules
+# node modules
+server/node_modules/
 client/ecommerce/node_modules/
+
+# environment files
+.env
+server/.env

@@ -2,7 +2,6 @@ import TableHeadItems from "./tableHeadItems";
 import TableRow from "./tableRow";
 
 const Table = ({ columns, data }) => {
-  // console.log(data)
 
     return (
         <div >

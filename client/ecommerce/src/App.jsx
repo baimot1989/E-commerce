@@ -38,6 +38,10 @@ import GuestRoute from './components/ProtectionRoute/guestRoute';
 import CustomerRoute from './components/ProtectionRoute/customerRoute';
 import AdminRoute from './components/ProtectionRoute/adminRoute';
 import PreOrderForm from './customerMode/components/checkout';
+import CheckoutProcess from './components/ProtectionRoute/checkoutProcess';
+import CheckoutForm from './components/checkoutForm';
+import Payment from './components/payment';
+import Completion from './components/completion';
 
 // Theme Setup
 const theme = createTheme({
@@ -70,6 +74,7 @@ function App() {
             {/* Guest-only routes */}
             <Route element={<GuestRoute />}>
               <Route path='customerdash/products' element={<ProductsCatlog />} />
+              <Route path='customerdash/product/:id' element={<ProductPage />} />
               {/* <Route path='customerdash/product/:id' element={<ProductPage />} />   יש בעיה */}
               <Route path='/login' element={<Login />} />
               <Route path='/signup' element={<Signup />} />
@@ -87,11 +92,13 @@ function App() {
             {/* Customer routes */}
             <Route element={<CustomerRoute />}>
               <Route path='customerdash' element={<ProductsCatlog />} />
-              <Route path='customerdash/products' element={<ProductsCatlog />} />
               <Route path='customerdash/myorders' element={<MyOrders />} />
               <Route path='customerdash/myaccount' element={<MyAccount />} />
-              <Route path='customerdash/product/:id' element={<ProductPage />} />
-              <Route path='customerdash/preorder' element={<PreOrderForm />} />
+              <Route element={<CheckoutProcess />}>
+                <Route path='customerdash/preorder' element={<PreOrderForm />} />
+                <Route path='customerdash/preorder/payment' element={<Payment />} />
+              </Route>
+              <Route path='customerdash/preorder/payment/completion' element={<Completion />} />
             </Route>
 
             {/* 404 */}

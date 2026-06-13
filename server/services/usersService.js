@@ -19,6 +19,9 @@ const addUser = async (newUser) => {
    if (userExists) {
       throw new Error('Username is already in use');
    }
+   if (newUser.password !== newUser.confirmPassword) {
+      throw new Error("Passwords do not match")
+   }
 
    // // 🔐 Password validation
    // const password = newUser.password;
@@ -44,11 +47,19 @@ const addUser = async (newUser) => {
    return result;
 };
 
-const updateUser  = async (id, obj) => {
-   if(!obj.password){
+const updateUser = async (id, obj) => {
+   if (!obj.password) {
       throw new Error('Must fill in a password ');
    }
+
+   // const user = await usersRepo.getUserById(id);
+   // const updatedUser = { ...user, ...obj }
+   
    return usersRepo.updateUser(id, obj);
+};
+const updateUserByPatch = async (id, obj) => {
+
+   return usersRepo.updateUserByPatch(id, obj);
 };
 
 const deleteUser = (id) => {
@@ -72,7 +83,7 @@ const loginUser = async (userName, password) => { // temp' צריך לעשות �
    }
 
    // const isMatch = await bcrypt.compare(password, user.password);
-   
+
    // if (!isMatch) {
    //    console.log(isMatch)
    //    // handle invalid login
@@ -92,4 +103,4 @@ const loginUser = async (userName, password) => { // temp' צריך לעשות �
    }
 }
 
-module.exports = { getAllUsers, getUserById, addUser, updateUser, deleteUser, loginUser };
+module.exports = { getAllUsers, getUserById, addUser, updateUser, deleteUser, loginUser, updateUserByPatch };

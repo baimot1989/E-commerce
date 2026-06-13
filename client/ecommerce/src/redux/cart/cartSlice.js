@@ -4,8 +4,10 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   cartItems: [],
+  shippingAddress: null,
   cartOpen: false,
   totalItemTypes: 0,
+  readyToCheckout: false,
   subtotal: 0,
   error: null,
   success: false,
@@ -20,7 +22,6 @@ const cartSlice = createSlice({
     setCartItems: (state, action) => {
       state.cartItems = action.payload;
       state.totalItemTypes = state.cartItems.length;
-      console.log(action.payload)
     },
     increaseQty: (state, action) => {
       const item = state.cartItems.find((i) => i._id === action.payload);
@@ -38,15 +39,15 @@ const cartSlice = createSlice({
     addItem: (state, action) => {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(item => item._id === newItem._id);
-    // אם המוצר קיים בעגלה, לא להוסיף
+      // אם המוצר קיים בעגלה, לא להוסיף
       if (existingItem) {
-        state.error = 'המוצר כבר נוסף לעגלה';
+        state.error = '   This product is already in your cart';
         state.success = false;
       } else {
         state.cartItems.push({ ...newItem, quantity: 1 });
         state.totalItemTypes = state.cartItems.length;
         state.error = null;
-        state.success = true; 
+        state.success = true;
       }
     },
     // להסיר מוצר מעגלה
@@ -57,32 +58,39 @@ const cartSlice = createSlice({
     },
     // REDUCER FOR TOTAL PRICE
     calcSubtotal: (state) => {
-        state.subtotal = state.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+      state.subtotal = state.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
 
+    },
+    shippingAddressUpdate: (state, action) => {
+      const newShippingAddress = action.payload;
+      state.shippingAddress = newShippingAddress;
     },
     clearCart: (state) => {
       state.cartItems = [];
     },
     // REDUCER FOR UPDATING  QUANTITY OF ITEMS
     totalItem: (state) => {
-      console.log(state.cartItems.length)
-        state.totalItemTypes = state.cartItems.length;
-      },
-      setOrderSuccess: (state) => {
-           state.orderSuccess = !state.orderSuccess;
-      },
-        // REDUCER FOR CLEAR  ERROR STATA 
-      clearCartError: (state) => {
-        state.error = null;
-      },
-      clearCartSuccess: (state) => {
-        state.success = false;
-      },
+      state.totalItemTypes = state.cartItems.length;
+      if (state.cartItems.length > 0) {
+        state.readyToCheckout = true;
+      } else {
+        state.readyToCheckout = false;
+      }
+    },
+    setOrderSuccess: (state) => {
+      state.orderSuccess = !state.orderSuccess;
+    },
+    // REDUCER FOR CLEAR  ERROR STATA 
+    clearCartError: (state) => {
+      state.error = null;
+    },
+    clearCartSuccess: (state) => {
+      state.success = false;
+    },
 
     // REDUCERS FOR CONTROLLING CART DRAWER
     openCart: (state) => {
       state.cartOpen = true;
-      console.log(state.cartOpen)
     },
     closeCart: (state) => {
       state.cartOpen = false;
@@ -108,7 +116,8 @@ export const {
   clearCartSuccess,
   calcSubtotal,
   setOrderSuccess,
-  
+  shippingAddressUpdate
+
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

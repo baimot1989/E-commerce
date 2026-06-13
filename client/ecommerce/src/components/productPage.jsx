@@ -17,88 +17,55 @@ import "react-rater/lib/react-rater.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, clearCartError, clearCartSuccess } from "../redux/cart/cartSlice";
 import { setModalMassgae, setOpenModal } from "../redux/modal/modalSlice";
+import { useOutOfStock } from "../hooks/outOfStockCheckHook";
 
 const ProductDetail = () => {
 
     const dispatch = useDispatch();
+    const { beforeAddinToCart } = useOutOfStock();
 
-    const productDetailItem = {
-        images: [
-            {
-                original:
-                    "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=600",
-                thumbnail:
-                    "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=600",
-            },
-            {
-                original:
-                    "https://images.pexels.com/photos/1667088/pexels-photo-1667088.jpeg?auto=compress&cs=tinysrgb&w=600",
-                thumbnail:
-                    "https://images.pexels.com/photos/1667088/pexels-photo-1667088.jpeg?auto=compress&cs=tinysrgb&w=600",
-            },
-            {
-                original:
-                    "https://images.pexels.com/photos/2697787/pexels-photo-2697787.jpeg?auto=compress&cs=tinysrgb&w=600",
-                thumbnail:
-                    "https://images.pexels.com/photos/2697787/pexels-photo-2697787.jpeg?auto=compress&cs=tinysrgb&w=600",
-            },
-            {
-                original:
-                    "https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                thumbnail:
-                    "https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            },
-            {
-                original:
-                    "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
-                thumbnail:
-                    "https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=600",
-            },
-        ],
-        title: "BIG ITALIAN SOFA",
-        reviews: "150",
-        availability: true,
-        brand: "apex",
-        category: "Sofa",
-        sku: "BE45VGTRK",
-        price: 450,
-        previousPrice: 599,
-        description:
-            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem exercitationem voluptate sint eius ea assumenda provident eos repellendus qui neque!",
-        size: ["XS", "S", "M", "L", "XL"],
-        color: ["gray", "violet", "red"],
-    };
+    // use state
+    const [showMore, setShowMore] = useState(false); // use state for the description extende or short
+    const [images, setImages] = useState([]); // use state for contain the Image Gallery 
 
+    // Defining variables
     const { id } = useParams();
     const location = useLocation();
     const product = location.state;
     const error = useSelector((state) => state.cart.error);
     const success = useSelector((state) => state.cart.success);
     const previousPrice = product.price + Number(Math.floor(product.price * (15 / 100)));
-   
-    const [ images , setImages ] = useState([])
 
+    // Shorten the amount of words describing the product if it is more than 200 characters.
+    const shortText =
+        product.description.length > 200
+            ? product.description.slice(0, 200) + "..."
+            : product.description;
+
+            // adding product to cart
     const addToCart = () => {
-        dispatch(addItem(product));
+        beforeAddinToCart(product)
     };
 
-   useEffect(() => {
-    const imageProduct = product.imagesSrc.map(img => ({
-        original: img,
-        thumbnail: img
-    }));
+    // loading the Image Gallery and storing it in the useState
+    useEffect(() => {
+        const imageProduct = product.imagesSrc.map(img => ({
+            original: img,
+            thumbnail: img
+        }));
 
-    // Example: set state with images
-    setImages(imageProduct);
-}, []);
+        // Example: set state with images
+        setImages(imageProduct);
+    }, []);
 
+    // updating the message for the user after user trying to add product to the cart
     useEffect(() => {
         if (error) {
             dispatch(setModalMassgae(error));
             dispatch(setOpenModal());
             dispatch(clearCartError());
         } else if (success) {
-            dispatch(setModalMassgae('המוצר נוסף בהצלחה'));
+            dispatch(setModalMassgae("Item successfully added to your cart."));
             dispatch(setOpenModal());
             dispatch(clearCartSuccess());
         }
@@ -107,11 +74,24 @@ const ProductDetail = () => {
 
     return (
         <Container>
-            <Typography variant="h4" sx={{ textAlign: 'start', my: 2 }}> Product detail</Typography>
             <Grid container spacing={4} >
 
                 {/* Image Gallery */}
-                <Grid size={{ xs: 12, md: 6 }}>
+                <Grid size={{ xs: 12, md: 6 }}
+                    sx={{
+                        maxHeight: { xs: 300, md: 450 },
+                        
+
+                        "& .image-gallery": {
+                            height: "100%",
+                        },
+
+                        "& .image-gallery-slide img": {
+                            width: "100%",
+                            height: { xs: 250, md: 280 },
+                            objectFit: "contain",
+                        },
+                    }} py={2}>
                     <ReactImageGallery
                         showBullets={false}
                         showFullscreenButton={false}
@@ -122,62 +102,42 @@ const ProductDetail = () => {
 
                 {/* Product Info */}
                 <Grid size={{ xs: 12, md: 6 }}>
-                    <Box sx={{ minHeight: '320px', maxHeight: '500px', height: '70vh' }}>
-                        <Typography variant="h5" fontWeight="bold">
-                            {product.title}
-                        </Typography>
-
-                        <Box display="flex" alignItems="center" mt={1}>
-                            <Rating value={3.5} precision={0.5} readOnly />
-
-                            <Typography variant="body2" color="gray" ml={2}>
-                                ({150})
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            height: "100%",
+                        }}
+                    >
+                        {/* product title */}
+                        <Box sx={{ flex: 1 }}>
+                            <Typography variant="h6" fontWeight="bold" pt={3}>
+                                {product.title}
                             </Typography>
+
+                            {/* Product description */}
+                            <Typography  mt={2} color="text.secondary">
+                                {showMore ? product.description : shortText}
+                            </Typography>
+                            {product.description.length > 200 && (
+                                <Button onClick={() => setShowMore(prev => !prev)}> {/* Button to shorten or expand the text  */}
+                                    {showMore ? "Show less" : "Read more"}
+                                </Button>
+                            )}
                         </Box>
 
-                        <Typography variant="body1" fontWeight="bold" mt={3}>
-                            Availability:{" "}
-                            <Box component="span" color={productDetailItem.availability ? "green" : "red"}>
-                                {product.inStock ? "In Stock" : "Expired"}
-                            </Box>
-                        </Typography>
-
-                        <Typography>
-                            <b>Category:</b> {product.category}
-                        </Typography>
-
-                        <Typography variant="h4" color="primary" mt={3}>
-                            ${product.price}
-                            <Typography component="span" ml={2} fontSize="0.875rem" color="gray" sx={{ textDecoration: "line-through" }}>
-                                ${previousPrice}
-                            </Typography>
-                        </Typography>
-                        <Typography sx={{color: product.inStock === 0 ? 'red': 'black' }}>
-                            {product.inStock === 0 ? 'out of stock' : `In stock: ${product.inStock}`}
-                        </Typography>
-                        <Typography>
-                            {product.bought === 0 ? null : `bought: ${product.bought}`}
-                        </Typography>
-                        <Typography mt={2} color="text.secondary">
-                            {product.description}
-                        </Typography>
-
+                        <Stack direction="row" spacing={2} mt={3}>
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                onClick={addToCart}
+                            >
+                                Add to cart
+                            </Button>
+                        </Stack>
                     </Box>
-                    {/* Actions */}
-                    <Stack direction="row" spacing={2} my={3}>
-                        <Button
-                            sx={{ color: 'white' }}
-                            variant="contained"
-                            disabled={product.inStock === 0}
-                            color="primary"
-                            // startIcon={}
-                            fullWidth
-                            onClick={addToCart}
-                        >
-                            Add to cart
-                        </Button>
-                    </Stack>
                 </Grid>
+
             </Grid>
         </Container>
     );

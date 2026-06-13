@@ -2,18 +2,27 @@ const mongoose = require('mongoose');
 
 const ordersSchema = new mongoose.Schema(
     {
-        orderNumber: {type: Number, require: true},
-        customerFullName: {type: String, require: true},
-        data: {type: String, require: true},
+        orderNumber: { type: Number, require: true },
+        customerFullName: { type: String, require: true },
+        data: { type: String, require: true },
         totalPrice: Number,
-        productsList: {type: [
-            {productName: String,
-                quantity: {type: Number, require: true},
-                price: {type: String, require:true},
-                total: {type: String, require:true},
-                date: {type: String, require:true},
-            }
-        ]},
+        productsList: {
+            type: [
+                {
+                    productName: String,
+                    quantity: { type: Number, require: true },
+                    price: { type: String, require: true },
+                    total: { type: String, require: true },
+                    date: { type: String, require: true },
+                }
+            ]
+        },
+        shippingAddress: {
+            streetAddress: { type: String, require: true },
+            city: { type: String, require: true },
+            state: { type: String, require: true },
+            postal: { type: String, require: true },
+        }
     },
     { versionKey: false }
 );

@@ -4,33 +4,54 @@ import { useFetchData } from "../../hooks/fetchData";
 import { useState } from "react";
 import { padding } from "@mui/system";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const BarChartStat = () => {
 
-    const { data: products } = useFetchData('http://localhost:3000/products');
-    const { data: users } = useFetchData('http://localhost:3000/users');
+    // Fetch products and users data from API
+    const { data: products } = useFetchData(`${API_URL}/products`);
+    const { data} = useFetchData(`${API_URL}/users`);
+    const users = data.filter(user => user.userName !== 'Baimot')
 
-    const [selectedUser, setSelectedUser] = useState('')
+    const [selectedUser, setSelectedUser] = useState('');
     const [charData, setCharData] = useState([]);
+
+    // Handle user selection and build chart data for purchases
     const handleUserSelected = (e) => {
         const selectedName = e.target.value.toLowerCase();
 
-        // Initialize an array to store the chart data for this user
+        // Extract and aggregate all products purchased by the selected user
         const userBought = products.reduce((acc, product) => {
             const matches = product.boughtBy?.filter(item =>
                 item.fullName.toLowerCase() === selectedName
             );
+
+            // If user purchased this product, calculate total quantity
             if (matches?.length) {
-                // Sum up the total quantity of this product bought by the user
-                const total = matches.reduce((sum, item) => sum + item.quantity, 0);
+                const total = matches.reduce(
+                    (sum, item) => sum + item.quantity,
+                    0
+                );
 
                 acc.push({
-                    name: product.title,          // Product title (used as X-axis label)
-                    quantity: total,              // Total quantity bought (used as Y-axis value)
-                    fullName: matches[0].fullName, // User's full name (optional, not used in chart but kept for clarity);
+                    // Product name for chart display
+                    name:
+                        product.title.length > 20
+                            ? product.title.slice(0, 10) + "..."
+                            : product.title,
+
+                    // Total quantity purchased by the user
+                    quantity: total,
+
+                    // User identity (optional reference)
+                    fullName: matches[0].fullName,
                 });
             }
+
             return acc;
         }, []);
+
+        // Store selected user and generated chart data
         setSelectedUser(e.target.value);
         setCharData(userBought);
     };
@@ -39,7 +60,7 @@ const BarChartStat = () => {
     return (
         <>
             <Container maxWidth="xl" sx={{ width: { xs: '100%', md: "70%", xl: "80%" }, margin: '10px auto' }}>
-                <Typography style={{ marginBottom: '10px' }} variant="h6">Products quantity per custmor</Typography>
+                <Typography sx={{ marginBottom: '10px' }} variant="h6">Products quantity per custmor</Typography>
                 <Box sx={{ margin: '20px auto', width: { xs: '100%', md: "70%", xl: "50%" } }}>
                     <Select
                         fullWidth
@@ -61,7 +82,7 @@ const BarChartStat = () => {
                 {charData.length ?
 
                     <ResponsiveContainer width="100%" height={300}>
-                        <BarChart accessibilityLayer width={600} height={300} data={charData} style={{padding: '10px'}}>
+                        <BarChart accessibilityLayer width={600} height={300} data={charData} style={{ padding: '10px' }}>
                             <CartesianGrid vertical={false} />
                             <XAxis
                                 dataKey="name"

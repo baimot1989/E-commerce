@@ -2,19 +2,22 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { useDispatch, useSelector } from 'react-redux';
-import { login, clearError } from '../redux/auth/authSlice'
+import { login, clearError, resetAuth } from '../redux/auth/authSlice'
 import { Alert, Button, CircularProgress, Container, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { useFieldCheck } from "../hooks/useFieldCheck";
 
 const Login = () => {
+
+    // Defining variables
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.auth);
     const navigate = useNavigate();
+    const { fieldCheck } =  useFieldCheck()
     // const user = useSelector((state) => state.user?.userName); // ? opretor checked if the userName propetie exsist
-    const [userName, setUserName] = useState('')
-    const [password, setPassword] = useState('')
-    // const { login, error } = useLogin();
+    const [userDetails, setUserDetails] = useState({ userName: '', password: '' });
 
+    //  Redirect the user if the user exists.
     useEffect(() => {
         dispatch(clearError(null))
         if (auth.user) {
@@ -26,11 +29,25 @@ const Login = () => {
         }
     }, [auth.user, navigate]);
 
+    //  reset 
+    useEffect(() => {
+        dispatch(resetAuth());
+    }, []);
+    
+   // Updates a specific field in the user form state on input change
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUserDetails((prev) => ({ ...prev, [name]: value }));
+    }
+
+    // preform login request
     const heandleSubmit = async (e) => {
-        e.preventDefault()
-        // login(userName, password);
-        dispatch(login({ userName, password }))
-        setMessage(auth.error)
+        e.preventDefault();
+
+        const isValid = fieldCheck(userDetails); // Makes sure all fields are filled in.
+
+        if(!isValid) dispatch(login(userDetails))
+
     }
     return (
         <>
@@ -42,11 +59,11 @@ const Login = () => {
 
 
                 <Box component="form" onSubmit={heandleSubmit} sx={{ width: { xs: '80%', sm: '70%' }, maxWidth: '350px', margin: '0 auto' }}>
-                    {/* For each label+input pair, use a Box with flex display */}
+                   
                     <Box
                         sx={{
                             display: 'flex',
-                            flexDirection: "column", // stack on xs, inline on sm and up
+                            flexDirection: "column", 
                             alignItems: 'center',
                             justifyContent: 'center',
                             mb: 2,
@@ -61,8 +78,7 @@ const Login = () => {
                             label="User name"
                             variant="outlined"
                             id="userName"
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
+                            onChange={handleChange}
                         />
                     </Box>
 
@@ -84,8 +100,7 @@ const Login = () => {
                             label="Password"
                             variant="outlined"
                             id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={handleChange}
                         />
                     </Box>
 

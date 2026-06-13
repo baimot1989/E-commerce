@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const useSignup = () => {
     const [error, setError] = useState(null)
     const [isloading, setIsloading] = useState(null)
@@ -17,7 +19,7 @@ export const useSignup = () => {
             // if(obj.password == obj.confirmPassword) {
             //     throw new Error("Passwords do not match");
             // }
-            const { data } = await axios.post('http://localhost:3000/authUser/singup', obj);
+            const { data } = await axios.post(`${API_URL}/authUser/singup`, obj);
             setIsloading(false);
             navigate('/login')
         } catch (error) {

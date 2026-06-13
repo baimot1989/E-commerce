@@ -9,6 +9,7 @@ const usersController = require('./controllers/usersController');
 const ordersController = require('./controllers/ordersController');
 const categoriesController = require('./controllers/categoriesController');
 const authUserController = require('./controllers/authUserController');
+const paymentController = require('./controllers/paymentController');
 const { requireAuth } = require('./middleware/authRequire');
 
 dotenv.config()
@@ -22,12 +23,15 @@ connectDB();
 app.use(cookieParser())
 app.use('/', express.json());
 app.use(cors({
-    origin: 'http://localhost:5173', //  React app's URL 
+    origin: true,
     credentials: true
 }));
 
+ 
+
 // Routs
 app.use('/products', productController)
+app.use('/payment', paymentController)
 app.use('/users', usersController)
 app.use('/orders', ordersController)
 app.use('/categories', categoriesController)
@@ -40,6 +44,7 @@ app.get('/', (req, res) => {
     }
 })
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
+
     console.log(`app is listening at http://localhost:${port}`);
 })

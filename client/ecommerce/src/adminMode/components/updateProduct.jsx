@@ -111,10 +111,10 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
         // Extract current form data for this product
         const form = productForms[id];
         const category = categoriesById[id];
-        console.log(form)
 
         // Validate form data via passed-in validation function
         const isValid = requestValidation(form);
+        console.log(isValid)
         if (!isValid) return;
 
         // Prepare updated product data including category
@@ -125,7 +125,6 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
         };
 
         // Send update request to server
-        console.log(updatedProduct)
         const status = await updateData(id, updatedProduct);
 
         if (status === "OK") {
@@ -154,9 +153,15 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
     return (
         <>
             <Container maxWidth="xl">
-                <Typography variant="h5" style={{ marginBottom: '20px', marginTop: '20px' }}>
+                <Typography variant="h5" sx={{ marginBottom: '20px', marginTop: '20px' }}>
                     Products
                 </Typography>
+                  {/* Add new product button */}
+                <Box sx={{ width: '80%', margin: '15px auto', textAlign: 'right' }}>
+                    <Button variant="contained" onClick={createProduct} sx={{ marginTop: '5px' }}>
+                        Add Product
+                    </Button>
+                </Box>
 
                 {/* Loop over each product and create an editable form */}
                 {products.map(item => (
@@ -169,7 +174,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                             margin: '0 auto', marginTop: '30px',
                         }}
                     >
-                        <Paper style={{ padding: '25px', backgroundColor: '#e3e6f0' }}>
+                        <Paper sx={{ padding: '25px', backgroundColor: '#e3e6f0' }}>
                             <Typography variant="h6" gutterBottom>
                                 Editing Product: {productForms[item._id]?.title || ''}
                             </Typography>
@@ -179,6 +184,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                 <Grid size={{ xs: 12, md: 6 }}>
                                     <TextField
                                         fullWidth
+                                        required
                                         label="Title"
                                         variant="outlined"
                                         value={productForms[item._id]?.title || ''}
@@ -190,6 +196,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                     <Box sx={{ display: 'flex', gap: 2 }}>
                                         <TextField
                                             fullWidth
+                                            required
                                             type="number"
                                             label="Price"
                                             variant="outlined"
@@ -198,7 +205,8 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                                         />
                                         <TextField
                                             fullWidth
-                                            type="number"
+                                            required
+                                            type="text"
                                             label="inStock"
                                             variant="outlined"
                                             value={productForms[item._id]?.inStock || 0}
@@ -283,7 +291,7 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
 
                                 {/* Bought by table */}
                                 <Grid size={{ xs: 12, md: 6 }}>
-                                    <Typography variant='h5' style={{ textAlign: 'center', margin: '5px' }}>
+                                    <Typography variant='h5' sx={{ textAlign: 'center', margin: '5px' }}>
                                         Bought by
                                     </Typography>
                                     <TableComp columns={columns} data={item.boughtBy} />
@@ -307,13 +315,6 @@ const UpdateProducts = ({ products, categories, createProduct, updateData, delet
                         </Paper>
                     </Box>
                 ))}
-
-                {/* Add new product button */}
-                <Box style={{ width: '80%', margin: '15px auto' }}>
-                    <Button variant="contained" onClick={createProduct} style={{ marginTop: '30px' }}>
-                        Add Product
-                    </Button>
-                </Box>
             </Container>
         </>
     );

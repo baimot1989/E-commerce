@@ -2,12 +2,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import FilterBar from '../components/filterBar'; 
 import ProductList from '../components/productList'; 
 import { useFetchData } from "../../hooks/fetchData"; // Custom hook to fetch data from API
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+
+
 const ProductPage = () => {
     // Fetch categories from API
-    const { data: categories = [], isloading: loadingCategories } = useFetchData('http://localhost:3000/categories');
+    const { data: categories = [], isloading: loadingCategories } = useFetchData(`${API_URL}/categories`);
 
     // Fetch products from API
-    const { data: products = [], isloading: loadingProducts } = useFetchData('http://localhost:3000/products');
+    const { data: products = [], isloading: loadingProducts } = useFetchData(`${API_URL}/products`);
    
     // State to store the filtered list of products
     const [filtered, setFiltered] = useState([]);

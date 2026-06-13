@@ -15,7 +15,6 @@ export const loadCartForUser = (userId) => {
 
 // localStorage פונקציה ששומרת את העגלת קניות של משתמש במערכת ב
 export const saveCartForUser = (userId, cartItems) => {
-  console.log(cartItems)
   try {
     localStorage.setItem(`cart_${userId}`, JSON.stringify(cartItems));
   } catch (err) {

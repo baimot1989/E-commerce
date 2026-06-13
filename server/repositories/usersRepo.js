@@ -15,8 +15,16 @@ const addUser = (obj) => {
     return user.save();
 };
 const updateUser = (id, obj) => {
+    console.log(obj)
     return Users.findByIdAndUpdate(id, obj);
 }; 
+const updateUserByPatch = async (id, obj) => {
+  return await Users.findByIdAndUpdate(
+    id,
+    { $set: obj },
+    { new: true }
+  );
+};
 const deleteUser = (id) => {
     return Users.findByIdAndDelete(id);
 };
@@ -27,6 +35,7 @@ module.exports = {
     addUser,
     updateUser,
     deleteUser,
-    getUserByUserName
+    getUserByUserName,
+    updateUserByPatch
 }
 

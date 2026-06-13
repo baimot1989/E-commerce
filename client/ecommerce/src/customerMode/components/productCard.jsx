@@ -4,15 +4,18 @@ import { addItem, clearCartError, clearCartSuccess } from "../../redux/cart/cart
 import { Link } from "react-router-dom";
 import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
 import { useEffect } from "react";
+import { useOutOfStock } from "../../hooks/outOfStockCheckHook";
 
 const ProductCard = ({ product }) => {
 
     const error = useSelector((state) => state.cart.error);
     const success = useSelector((state) => state.cart.success);
+    const { beforeAddinToCart } = useOutOfStock(); 
     const dispatch = useDispatch();
 
     const addToCart = () => {
-        dispatch(addItem(product));
+
+        beforeAddinToCart(product)
     };
 
     useEffect(() => {
@@ -21,7 +24,7 @@ const ProductCard = ({ product }) => {
             dispatch(setOpenModal());
             dispatch(clearCartError());
         } else if (success) {
-            dispatch(setModalMassgae('המוצר נוסף בהצלחה'));
+            dispatch(setModalMassgae("Item successfully added to your cart."));
             dispatch(setOpenModal());
             dispatch(clearCartSuccess());
         }
@@ -35,7 +38,7 @@ const ProductCard = ({ product }) => {
                     title={
                         <Typography
                             noWrap
-                            sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' , width: '80%'}}
+                            sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '80%' }}
                             variant="h6"
                         >
                             {product.title}
@@ -72,7 +75,7 @@ const ProductCard = ({ product }) => {
                     <Button
                         onClick={addToCart}
                         variant="contained"
-                        disabled={product.inStock === 0}
+                        // disabled={product.inStock === 0}
                         sx={{ fontSize: { md: '12px' }, color: 'white', backgroundColor: '#212121' }}
                     >
                         Add to cart</Button>

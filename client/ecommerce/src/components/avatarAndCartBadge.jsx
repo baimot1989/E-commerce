@@ -17,14 +17,6 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import CartBadge from "./cartBadge";
 
-// const StyledBadge = styled(Badge)(({ theme }) => ({
-//   "& .MuiBadge-badge": {
-//     right: -3,
-//     top: 13,
-//     padding: "0 4px",
-//   },
-// }));
-
 const menuOptions = [
   { label: "My Account", action: "account" },
   { label: "Logout", action: "logout" },
@@ -33,7 +25,6 @@ const menuOptions = [
 const AvaterAndCartBadge = () => {
   const user = useSelector((state) => state.auth.user);
   const totalItemTypes = useSelector((state) => state.cart.totalItemTypes);
-  console.log(totalItemTypes)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -61,14 +52,8 @@ const AvaterAndCartBadge = () => {
         justifyContent: user?.role === "customer" ? "space-between" : "flex-end",
       }}
     >
-      {console.log(user?.role)}
       {user?.role === "customer" && (
-        <CartBadge />
-        // <IconButton aria-label="cart" onClick={() => dispatch(openCart())}>
-        //   <StyledBadge badgeContent={totalItemTypes} color="secondary">
-        //     <ShoppingCartIcon sx={{ color: "white" }} />
-        //   </StyledBadge>
-        // </IconButton>
+        <CartBadge /> 
       )}
 
       <Box sx={{ flexGrow: 0 }}>

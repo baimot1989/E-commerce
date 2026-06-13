@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // לבדוק מה לעשות אם רידקס
 // 
 export const useFetchData = (url) => {
-
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [data, setData] = useState([]);
@@ -29,7 +29,7 @@ export const useFetchData = (url) => {
     const addData = async (obj) => {
         setIsloading(true);
         try {
-            const { statusText ,data } = await axios.post(url, obj, { withCredentials: true });
+            const { statusText, data } = await axios.post(url, obj, { withCredentials: true });
             setResp(data);
             setIsloading(false);
             return statusText
@@ -37,7 +37,7 @@ export const useFetchData = (url) => {
             const message = error.response?.data?.error || 'Request failed';
             setError(message);
             setIsloading(false);
-            throw new Error(message);  
+            throw new Error(message);
         } finally {
             setIsloading(false);
         }
@@ -46,8 +46,8 @@ export const useFetchData = (url) => {
     const updateData = async (id, obj) => {
         setIsloading(true)
         try {
+            console.log(obj)
             const { statusText, data } = await axios.put(`${url}/${id}`, obj, { withCredentials: true });
-            console.log(statusText)
             setIsloading(false)
             setResp(data);
             return statusText
@@ -55,7 +55,23 @@ export const useFetchData = (url) => {
             const message = error.response?.data?.error || 'Update failed';
             setError(message)
             setIsloading(false)
-            throw new Error(message); 
+            throw new Error(message);
+        } finally {
+            setIsloading(false);
+        }
+    };
+    const updateByPatch = async (id, obj) => {
+        setIsloading(true)
+        try {
+            const { statusText, data } = await axios.patch(`${url}/${id}`, obj, { withCredentials: true });
+            setIsloading(false)
+            setResp(data);
+            return statusText
+        } catch (error) {
+            const message = error.response?.data?.error || 'Update failed';
+            setError(message)
+            setIsloading(false)
+            throw new Error(message);
         } finally {
             setIsloading(false);
         }
@@ -63,7 +79,7 @@ export const useFetchData = (url) => {
     const deleteData = async (id) => {
         setIsloading(true)
         try {
-            const { statusText ,data } = await axios.delete(`${url}/${id}`, { withCredentials: true });
+            const { statusText, data } = await axios.delete(`${url}/${id}`, { withCredentials: true });
             setResp(data);
             setIsloading(false)
             return statusText
@@ -71,11 +87,11 @@ export const useFetchData = (url) => {
             const message = error.response?.data?.error || 'Request failed';
             setError(message)
             setIsloading(false)
-            throw new Error(message); 
-        }finally {
+            throw new Error(message);
+        } finally {
             setIsloading(false);
         }
     }
 
-    return { addData, updateData, deleteData, data, error, isloading }
+    return { addData, updateData, updateByPatch, deleteData, data, error, isloading }
 }

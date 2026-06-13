@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Button, Grid, TextField, Typography, Box, Container } from "@mui/material";
+import { useFieldCheck } from "../../hooks/useFieldCheck";
 
 const Category = ({ item, updateData, deleteData }) => {
+
+  const { fieldCheck } = useFieldCheck();
+
   const [editId, setEditId] = useState(null);
   const [editValue, setEditValue] = useState("");
 
@@ -16,7 +20,10 @@ const Category = ({ item, updateData, deleteData }) => {
   };
 
   const saveEdit = () => {
-    if (editValue.trim()) {
+
+    const isValid = fieldCheck({editValue: editValue});
+
+    if (!isValid) {
       updateData(editId, { categoryName: editValue });
       setEditId(null);
       setEditValue("");
@@ -24,56 +31,56 @@ const Category = ({ item, updateData, deleteData }) => {
   };
 
   return (
-      <Grid container spacing={2} alignItems="center" justifyContent={'center'} sx={{my: 2}}>
-        <Grid size={{ xs: 12, sm: 6}}>
-          {editId === item._id ? (
-            <TextField
-              fullWidth
-              label="Category"
-              variant="outlined"
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-            />
-          ) : (
-            <Typography variant="h5" sx={{ ml: 1 }}>
-              {item.categoryName}
-            </Typography>
-          )}
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6}}>
-          <Box sx={{ display: "flex", justifyContent: 'center', gap: 2 }}>
-            {editId === item._id ? (
-              <>
-                <Button variant="contained" color="primary" onClick={saveEdit}>
-                  Save
-                </Button>
-                <Button variant="contained" color="error" onClick={cancelEdit}>
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{backgroundColor: '#212121'}}
-                  onClick={() => startEditing(item)}
-                >
-                  Update
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => deleteData(item._id)}
-                >
-                  Remove
-                </Button>
-              </>
-            )}
-          </Box>
-        </Grid>
+    <Grid container spacing={2} alignItems="center" justifyContent='center' sx={{ my: 2 }}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        {editId === item._id ? (
+          <TextField
+            fullWidth
+            label="Category"
+            variant="outlined"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+          />
+        ) : (
+          <Typography variant="h5" sx={{ ml: 1 }}>
+            {item.categoryName}
+          </Typography>
+        )}
       </Grid>
+
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Box sx={{ display: "flex", justifyContent: { xs: 'space-between', sm: 'end' }, gap: 2 }}>
+          {editId === item._id ? (
+            <>
+              <Button variant="contained" color="primary" onClick={saveEdit}>
+                Save
+              </Button>
+              <Button variant="contained" color="error" onClick={cancelEdit}>
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ backgroundColor: '#212121' }}
+                onClick={() => startEditing(item)}
+              >
+                Update
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => deleteData(item._id)}
+              >
+                Remove
+              </Button>
+            </>
+          )}
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

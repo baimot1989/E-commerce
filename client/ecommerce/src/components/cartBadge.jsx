@@ -27,7 +27,6 @@ const CartBadge = () => {
 
     const cartItems = useSelector((state) => state.cart.cartItems);
     const totalItemTypes = useSelector((state) => state.cart.totalItemTypes);
-    console.log(totalItemTypes)
     const dispatch = useDispatch();
     return (
         <>

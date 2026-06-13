@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const useLogin = () => {
     const [error, setError] = useState(null)
     const dispatch = useDispatch();
@@ -14,7 +16,7 @@ export const useLogin = () => {
         setError(null)
 
         try {
-            const { data } = await axios.post('http://localhost:3000/authUser/login', { userName, password })
+            const { data } = await axios.post(`${API_URL}/authUser/login`, { userName, password })
             console.log(data)
             localStorage.setItem('user', JSON.stringify(data))
             dispatch({ type: 'LOGIN', payload: data });

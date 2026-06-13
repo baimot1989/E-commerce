@@ -14,25 +14,22 @@ import {
   setOpenModal
 } from "../redux/modal/modalSlice";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const useSubmitOrder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { updateData, isloading } = useFetchData('http://localhost:3000/products');
-  const { addData } = useFetchData('http://localhost:3000/orders');
+  const { updateData, isloading } = useFetchData(`${API_URL}/products`);
+  const { updateByPatch } = useFetchData(`${API_URL}/users`);
+  const { addData } = useFetchData(`${API_URL}/orders`);
   const cartItems = useSelector(state => state.cart.cartItems);
+  const shippingAddress = useSelector(state => state.cart.shippingAddress);
   const user = useSelector(state => state.auth.user);
   const subtotal = useSelector(state => state.cart.subtotal);
 
   const submitOrder = async () => {
-    try {
-      // Validate stock before proceeding
-      const outOfStockItem = cartItems.find(item => item.inStock - item.quantity < 0);
-      if (outOfStockItem) {
-        dispatch(setModalMassgae(`Sorry, "${outOfStockItem.title}" is out of stock.`));
-        dispatch(setOpenModal());
-        return;
-      }
 
+    try {
       // Update products
       const updatePromises = cartItems.map(item => {
         const updatedProduct = {
@@ -40,19 +37,20 @@ export const useSubmitOrder = () => {
           boughtBy: [...(item.boughtBy || []), {
             fullName: `${user.firstName} ${user.lastName}`,
             quantity: item.quantity,
-            bought: item.bought+item.quantity,
+            bought: item.bought + item.quantity,
             date: getDate(),
           }],
           inStock: item.inStock - item.quantity,
         };
-        if(user.allowOthersToSeeOrders){
-          updatedProduct.bought = item.bought+item.quantity;
+        if (user.allowOthersToSeeOrders) {
+          updatedProduct.bought = item.bought + item.quantity;
         }
         console.log(updatedProduct)
         return updateData(item._id, updatedProduct);
       });
 
       await Promise.all(updatePromises);
+      
 
       // Add order
       await addData({
@@ -66,16 +64,17 @@ export const useSubmitOrder = () => {
           date: getDate(),
         })),
       });
+         
+      // Update user Shipping Address
+      await updateByPatch(user._id, shippingAddress)
 
       // Finalize
-      dispatch(closeCart());
       dispatch(clearCart());
-      dispatch(setOrderSuccess());
-      dispatch(setModalMassgae('Your order has been placed successfully!'));
-      dispatch(setOpenModal());
-      // navigate('/thank-you'); // optional
-
+     
     } catch (err) {
+      console.log("ERROR:", err);
+      console.log("RESPONSE:", err.response);
+      console.log("DATA:", err.response?.data);
       dispatch(setModalMassgae('Something went wrong...'));
       dispatch(setOpenModal());
       dispatch(clearCartError());

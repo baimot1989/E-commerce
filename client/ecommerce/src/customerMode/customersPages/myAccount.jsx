@@ -16,23 +16,28 @@ import { useFetchData } from "../../hooks/fetchData"; // Custom hook for making 
 import { updateUser } from "../../redux/auth/authSlice"; // Redux action to update the user
 import { useState } from "react";
 import { setModalMassgae, setOpenModal } from "../../redux/modal/modalSlice";
+import { useFieldCheck } from "../../hooks/useFieldCheck";
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 const MyAccount = () => {
     // Get the current user from Redux state
     const user = useSelector((state) => state.auth.user);
 
     // Destructure updateData function and loading/error states from custom fetch hook
-    const { updateData, error, isloading } = useFetchData('http://localhost:3000/users');
+    const { updateData, error, isloading } = useFetchData(`${API_URL}/users`);
 
     // Get Redux dispatcher to send actions
     const dispatch = useDispatch();
+
+    const { fieldCheck } = useFieldCheck();
 
     // Local state to manage form input values including checkbox
     const [userDetails, setUserDetails] = useState({
         firstName: user.firstName,
         lastName: user.lastName,
         userName: user.userName,
+        email: user.email,
         password: '',
         allowOthersToSeeOrders: user.allowOthersToSeeOrders
     });
@@ -48,19 +53,25 @@ const MyAccount = () => {
         }));
     };
 
-
+    // Submit handler for updating user profile
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const status = await updateData(user._id, userDetails);
-        if (status === 'OK') {
-            dispatch(updateUser(userDetails)); // Update Redux store
-            // alert("Profile updated successfully!");
-            dispatch(setModalMassgae('Profile updated successfully!'));
-            dispatch(setOpenModal());
 
-            // Clear password input after successful update
-            setUserDetails((prev) => ({ ...prev, password: '' }));
+        const isValid = fieldCheck(userDetails, ["allowOthersToSeeOrders"]); // Makes sure all fields are filled in.
+
+        if (!isValid) {
+            const status = await updateData(user._id, userDetails);
+            if (status === 'OK') {
+                dispatch(updateUser(userDetails)); // Update Redux store
+                // alert("Profile updated successfully!");
+                dispatch(setModalMassgae('Your profile has been updated successfully.'));
+                dispatch(setOpenModal());
+
+                // Clear password input after successful update
+                setUserDetails((prev) => ({ ...prev, password: '' }));
+            }
         }
+
     };
 
     return (
@@ -78,6 +89,7 @@ const MyAccount = () => {
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
+                                required
                                 type="text"
                                 name="firstName"
                                 label="First Name"
@@ -89,6 +101,7 @@ const MyAccount = () => {
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
+                                required
                                 type="text"
                                 name="lastName"
                                 label="Last Name"
@@ -100,11 +113,24 @@ const MyAccount = () => {
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
+                                required
                                 type="text"
                                 name="userName"
                                 label="User Name"
                                 variant="outlined"
                                 value={userDetails.userName}
+                                onChange={handleInputOnChange}
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <TextField
+                                fullWidth
+                                required
+                                type="email"
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                value={userDetails.email}
                                 onChange={handleInputOnChange}
                             />
                         </Grid>
@@ -135,7 +161,7 @@ const MyAccount = () => {
                     </Grid>
                     <Button
                         disabled={isloading}
-                        style={{ width: '100%', color: 'white' }}
+                        sx={{ width: '100%', color: 'white', marginTop: '15px' }}
                         type="submit"
                         variant="contained"
                     >

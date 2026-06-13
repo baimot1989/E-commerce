@@ -39,12 +39,14 @@ import TableComp from "../../components/tableComp";
 import { useFetchData } from "../../hooks/fetchData";
 import { useSelector } from "react-redux";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const MyOrders = () => {
     // Get the logged-in user from Redux store
     const user = useSelector((state) => state.auth.user);
 
     // Fetch all orders from the backend
-    const { data, error, isloading } = useFetchData('http://localhost:3000/orders');
+    const { data, error, isloading } = useFetchData(`${API_URL}/orders`);
 
     // Handle loading and error states
     if (isloading) {

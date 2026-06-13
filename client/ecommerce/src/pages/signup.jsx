@@ -4,9 +4,17 @@ import { useSignup } from "../hooks/useSignup"
 import { useSelector } from 'react-redux';
 import { Grid, Container, TextField, Typography, Button, Alert, FormControlLabel, Checkbox } from "@mui/material";
 import { Box } from "@mui/system";
+import { useFieldCheck } from "../hooks/useFieldCheck";
 
 const Signup = () => {
-    // state
+
+    // Defining variables
+    const { fieldCheck } = useFieldCheck()
+    const { signup, error, isloading } = useSignup();//useSignup properties
+
+    // use state
+    const [isChecked, setIsChecked] = useState(false);
+    const [message, setMessage] = useState(null);
     const [userDetile, setUserDetile] = useState(
         {
             firstName: '',
@@ -16,12 +24,8 @@ const Signup = () => {
             password: '',
             confirmPassword: ''
         })
-    const [isChecked, setIsChecked] = useState(false);
-    const [message, setMessage] = useState(null);
 
-    //useSignup properties
-    const { signup, error, isloading } = useSignup()
-
+    // Updates a specific field in the user form state on input change
     const heandle = (e) => {
         const { name, value, type, checked } = e.target;
         if (type === "checkbox") {
@@ -31,26 +35,29 @@ const Signup = () => {
         }
     }
 
-    // function fro submit the form
+    // function fro submit the signup  form
     const heandleSubmit = async (e) => {
         e.preventDefault()
-        userDetile.allowOthersToSeeOrders = isChecked
-        signup(userDetile);
-        setMessage(error)
+        const isValid = fieldCheck(userDetile);
+        if (!isValid) {
+            userDetile.allowOthersToSeeOrders = isChecked
+            signup(userDetile);
+            setMessage(error)
+        }
+
 
     }
-
 
     return (
         <>
             <Container>
                 <Typography variant="h4" style={{ textAlign: 'center', margin: '25px' }}>Signup</Typography>
-                <Box component="form" onSubmit={heandleSubmit} sx={{ maxWidth: '800px', width:{xs: '80%', sm: '60%' } , margin: '0 auto'}}>
+                <Box component="form" onSubmit={heandleSubmit} sx={{ maxWidth: '800px', width: { xs: '80%', sm: '60%' }, margin: '0 auto' }}>
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 fullWidth
-                                required
+
                                 type="text"
                                 name="firstName"
                                 label="First Name"

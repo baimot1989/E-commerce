@@ -12,7 +12,8 @@ const addProduct = async (obj) => {
    return await productsRepo.addProduct(newProduct);
 };
 
-const updateProduct = (id, obj) => {
+const updateProduct = async (id, obj) => {
+   console.log(obj)
    return productsRepo.updateProduct(id, obj);
 };
 
